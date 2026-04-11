@@ -33,7 +33,7 @@ export default function UsuarioDetallePage() {
     <div>
       <div className="flex items-center gap-4 mb-6">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push("/usuarios")}
           className="text-sm text-blue-600 hover:underline"
         >
           ← Volver

@@ -33,7 +33,7 @@ export default function SedeDetallePage() {
     <div>
       <div className="flex items-center gap-4 mb-6">
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push("/sedes")}
           className="text-sm text-blue-600 hover:underline"
         >
           ← Volver

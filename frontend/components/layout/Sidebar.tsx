@@ -9,7 +9,7 @@ const navItems = [
   { href: "/membresias", label: "Membresías" },
   { href: "/sedes", label: "Sedes" },
   { href: "/tipos-espacio", label: "Tipos de Espacio" },
-  { href: "/espacios", label: "Espacios" },
+  { href: "/espacios", label: "Espacios y Disponibilidad" },
   { href: "/tarifas", label: "Tarifas" },
   { href: "/reservas", label: "Reservas" },
 ];
