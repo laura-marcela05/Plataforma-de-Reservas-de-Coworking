@@ -1,9 +1,10 @@
 import { apiGet, apiPost, apiPut, apiDelete } from "@/lib/api";
 import type { Reserva } from "@/interfaces/reserva.interface";
 
+// ✅ HU-05: estado lo asigna automáticamente el backend ("activa")
 export type CreateReservaDto = Omit<
   Reserva,
-  "id" | "fechaCreacion" | "createdAt" | "updatedAt"
+  "id" | "estado" | "fechaCreacion" | "createdAt" | "updatedAt"
 >;
 export type UpdateReservaDto = Partial<CreateReservaDto>;
 
