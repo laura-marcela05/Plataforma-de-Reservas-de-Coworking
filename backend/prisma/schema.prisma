@@ -15,7 +15,7 @@ model Usuario {
   apellido    String
   correo      String    @unique
   contrasena  String
-  telefono    String?
+  telefono    String
   membresiaId Int
   membresia   Membresia @relation(fields: [membresiaId], references: [id])
   reservas    Reserva[]
@@ -51,12 +51,12 @@ model Sede {
 }
 
 model TipoEspacio {
-  id       Int       @id @default(autoincrement())
-  nombre   String    @unique
-  espacios Espacio[]
-  tarifas  Tarifa[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  nombre    String    @unique
+  espacios  Espacio[]
+  tarifas   Tarifa[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 
   @@map("tipos_espacio")
 }
@@ -73,6 +73,7 @@ model Espacio {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
+  @@unique([sedeId, nombre])
   @@map("espacios")
 }
 
@@ -90,19 +91,20 @@ model Tarifa {
   @@map("tarifas")
 }
 
+
 model Reserva {
-  id           Int      @id @default(autoincrement())
-  usuarioId    Int
-  espacioId    Int
-  fecha        DateTime
-  horaInicio   DateTime
-  horaFin      DateTime
-  estado       String   @default("activa")
+  id            Int      @id @default(autoincrement())
+  usuarioId     Int
+  espacioId     Int
+  fecha         DateTime @db.Date
+  horaInicio    DateTime @db.Time
+  horaFin       DateTime @db.Time
+  estado        String   @default("activa")
   fechaCreacion DateTime @default(now())
-  usuario      Usuario  @relation(fields: [usuarioId], references: [id])
-  espacio      Espacio  @relation(fields: [espacioId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+  espacio       Espacio  @relation(fields: [espacioId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("reservas")
 }

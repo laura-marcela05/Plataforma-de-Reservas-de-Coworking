@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
-import { TestModule } from './test/test.module';
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { MembresiasModule } from './modules/membresias/membresias.module';
 import { SedesModule } from './modules/sedes/sedes.module';
@@ -16,7 +15,6 @@ import { ReservasModule } from './modules/reservas/reservas.module';
       isGlobal: true,
     }),
     PrismaModule,
-    TestModule,
     UsuariosModule,
     MembresiasModule,
     SedesModule,
