@@ -164,6 +164,22 @@ export default function ReservasPage() {
     });
   };
 
+  // ── HU-06: cancelar reserva ─────────────────────────────────────
+  const cancelarReserva = async (id: number) => {
+    const confirmar = window.confirm(
+      "¿Estás seguro de que deseas cancelar esta reserva?",
+    );
+    if (!confirmar) return;
+
+    try {
+      await reservasService.cancelar(id);
+      alert("Reserva cancelada correctamente.");
+      await cargarTodo(); // refresca la tabla
+    } catch (e: unknown) {
+      alert(getErrorMessage(e));
+    }
+  };
+
   // ─── Render ──────────────────────────────────────────────────────────────────
 
   return (
@@ -359,6 +375,9 @@ export default function ReservasPage() {
                       <th className="text-left p-3 font-medium text-gray-600">
                         Estado
                       </th>
+                      <th className="text-left p-3 font-medium text-gray-600">
+                        Acciones
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -368,23 +387,41 @@ export default function ReservasPage() {
                         className="border-b border-gray-100 hover:bg-gray-50"
                       >
                         <td className="p-3">{r.id}</td>
+
                         <td className="p-3">{r.usuarioId}</td>
+
                         <td className="p-3">{r.espacioId}</td>
+
                         <td className="p-3">
                           {new Date(r.fecha).toLocaleDateString("es-CO")}
                         </td>
-                        {/* ✅ HU-05: formatea HH:mm desde el DateTime de Prisma */}
+
+                        {/* Hora inicio */}
                         <td className="p-3">{formatHora(r.horaInicio)}</td>
+
+                        {/* Hora fin */}
                         <td className="p-3">{formatHora(r.horaFin)}</td>
+
+                        {/* ✅ Columna ESTADO */}
                         <td className="p-3">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              ESTADO_BADGE[r.estado] ??
-                              "bg-gray-100 text-gray-600"
-                            }`}
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${ESTADO_BADGE[r.estado] ?? "bg-gray-100 text-gray-600"
+                              }`}
                           >
                             {r.estado}
                           </span>
+                        </td>
+
+                        {/* ✅ Columna ACCIONES (HU-06) */}
+                        <td className="p-3">
+                          {r.estado === "activa" && (
+                            <button
+                              onClick={() => cancelarReserva(r.id)}
+                              className="px-3 py-1 bg-red-600 text-white rounded-lg text-xs hover:bg-red-700"
+                            >
+                              Cancelar
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
