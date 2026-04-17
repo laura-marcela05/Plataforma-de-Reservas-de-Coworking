@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: coworking_db # puedes cambiar el nombre
+    container_name: coworking_db
     restart: unless-stopped
     env_file:
       - .env
@@ -51,6 +51,7 @@ services:
     container_name: coworking_frontend
     restart: unless-stopped
     environment:
+      # Desde el navegador del usuario, el backend se accede por localhost
       NEXT_PUBLIC_API_URL: http://localhost:3001
       TZ: America/Bogota
     ports:

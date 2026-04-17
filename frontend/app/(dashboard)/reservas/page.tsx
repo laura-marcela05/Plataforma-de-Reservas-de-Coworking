@@ -25,6 +25,15 @@ const ESTADO_BADGE: Record<string, string> = {
   finalizada: "bg-gray-100 text-gray-600",
 };
 
+// ✅ HU-05: extrae "HH:mm" desde el string DateTime que devuelve Prisma (@db.Time)
+const formatHora = (hora: string): string => {
+  try {
+    return new Date(hora).toISOString().slice(11, 16);
+  } catch {
+    return hora;
+  }
+};
+
 // ─── Componente principal ──────────────────────────────────────────────────────
 
 export default function ReservasPage() {
@@ -364,8 +373,9 @@ export default function ReservasPage() {
                         <td className="p-3">
                           {new Date(r.fecha).toLocaleDateString("es-CO")}
                         </td>
-                        <td className="p-3">{r.horaInicio}</td>
-                        <td className="p-3">{r.horaFin}</td>
+                        {/* ✅ HU-05: formatea HH:mm desde el DateTime de Prisma */}
+                        <td className="p-3">{formatHora(r.horaInicio)}</td>
+                        <td className="p-3">{formatHora(r.horaFin)}</td>
                         <td className="p-3">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
