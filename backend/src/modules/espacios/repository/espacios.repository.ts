@@ -45,6 +45,24 @@ export class EspaciosRepository {
       );
     }
 
+    if (dto.capacidad > sede.capacidadTotal) {
+      throw new BadRequestException(
+        `La capacidad del espacio (${dto.capacidad}) no puede superar la capacidad total de la sede (${sede.capacidadTotal})`,
+      );
+    }
+
+    const capacidadActualSede = await this.prisma.espacio.aggregate({
+      where: { sedeId: dto.sedeId },
+      _sum: { capacidad: true },
+    });
+
+    const capacidadOcupada = capacidadActualSede._sum.capacidad ?? 0;
+    if (capacidadOcupada + dto.capacidad > sede.capacidadTotal) {
+      throw new BadRequestException(
+        `La suma de capacidades de la sede excede su capacidad total (${sede.capacidadTotal})`,
+      );
+    }
+
     // ✅ Validar duplicado: nombre único por sede (regla A)
     const duplicado = await this.prisma.espacio.findFirst({
       where: {
@@ -112,6 +130,35 @@ export class EspaciosRepository {
     // ✅ Validar duplicado en update (considerando valores finales)
     const sedeFinal = dto.sedeId ?? actual.sedeId;
     const nombreFinal = dto.nombre ?? actual.nombre;
+    const capacidadFinal = dto.capacidad ?? actual.capacidad;
+
+    const sedeValidada = await this.prisma.sede.findUnique({
+      where: { id: sedeFinal },
+    });
+    if (!sedeValidada) {
+      throw new NotFoundException(`Sede #${sedeFinal} no encontrada`);
+    }
+
+    if (capacidadFinal > sedeValidada.capacidadTotal) {
+      throw new BadRequestException(
+        `La capacidad del espacio (${capacidadFinal}) no puede superar la capacidad total de la sede (${sedeValidada.capacidadTotal})`,
+      );
+    }
+
+    const capacidadActualSede = await this.prisma.espacio.aggregate({
+      where: {
+        sedeId: sedeFinal,
+        NOT: { id },
+      },
+      _sum: { capacidad: true },
+    });
+
+    const capacidadOcupada = capacidadActualSede._sum.capacidad ?? 0;
+    if (capacidadOcupada + capacidadFinal > sedeValidada.capacidadTotal) {
+      throw new BadRequestException(
+        `La suma de capacidades de la sede excede su capacidad total (${sedeValidada.capacidadTotal})`,
+      );
+    }
 
     const duplicado = await this.prisma.espacio.findFirst({
       where: {

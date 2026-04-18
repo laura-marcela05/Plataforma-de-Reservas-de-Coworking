@@ -27,11 +27,21 @@ const ESTADO_BADGE: Record<string, string> = {
 
 // ✅ HU-05: extrae "HH:mm" desde el string DateTime que devuelve Prisma (@db.Time)
 const formatHora = (hora: string): string => {
-  try {
-    return new Date(hora).toISOString().slice(11, 16);
-  } catch {
-    return hora;
-  }
+  // Prioriza HH:mm directamente del string ISO para evitar desfases por timezone.
+  const direct = hora.match(/T(\d{2}:\d{2})/);
+  if (direct) return direct[1];
+
+  if (/^\d{2}:\d{2}/.test(hora)) return hora.slice(0, 5);
+
+  const parsed = new Date(hora);
+  if (Number.isNaN(parsed.getTime())) return hora;
+
+  return parsed.toLocaleTimeString("es-CO", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "UTC",
+  });
 };
 
 // ─── Componente principal ──────────────────────────────────────────────────────

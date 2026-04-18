@@ -42,6 +42,16 @@ export class SedesRepository {
   async update(id: number, dto: UpdateSedeDto) {
     const actual = await this.findOne(id);
 
+    const espaciosAsociados = await this.prisma.espacio.count({
+      where: { sedeId: id },
+    });
+
+    if (espaciosAsociados > 0) {
+      throw new ConflictException(
+        'No se puede editar: la sede tiene espacios asociados',
+      );
+    }
+
     // Si en el update viene solo uno de los dos, usamos el valor actual del otro
     const apertura = dto.horarioApertura ?? actual.horarioApertura;
     const cierre = dto.horarioCierre ?? actual.horarioCierre;
