@@ -64,6 +64,22 @@ export async function apiPut<T>(path: string, body: unknown): Promise<T> {
   return json.data as T;
 }
 
+export async function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE_URL}/api/v1${path}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const msg = await extractErrorMessage(res, `PATCH ${path} failed: ${res.status}`);
+    throw new Error(msg);
+  }
+
+  const json = await res.json();
+  return json.data as T;
+}
+
 export async function apiDelete<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE_URL}/api/v1${path}`, { method: "DELETE" });
 
