@@ -1,13 +1,8 @@
 #!/bin/sh
 set -e
-
-# Evita estados inconsistentes de build incremental en volúmenes Docker.
 rm -f tsconfig.build.tsbuildinfo
 rm -rf dist
-
-echo "⏳ Ejecutando migraciones de Prisma..."
+echo "Running Prisma migrations..."
 npx prisma migrate deploy
-
-echo "✅ Schema sincronizado. Iniciando backend..."
-exec npm run start:dev
-
+echo "Schema synced. Starting backend..."
+exec npm run start:prod
