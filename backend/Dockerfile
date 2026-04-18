@@ -18,6 +18,8 @@ COPY . .
 
 RUN npx prisma generate
 
+RUN sed -i 's/\r$//' entrypoint.sh
+
 RUN chmod +x entrypoint.sh
 
 EXPOSE 3001

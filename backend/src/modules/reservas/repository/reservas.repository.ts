@@ -10,6 +10,16 @@ import { CreateReservaDto } from '../dto/create-reserva.dto';
 export class ReservasRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private toUtcTime(hhmm: string) {
+    const [hours, minutes] = hhmm.split(':').map(Number);
+    return new Date(Date.UTC(1970, 0, 1, hours, minutes, 0));
+  }
+
+  private toMinutes(hhmm: string) {
+    const [hours, minutes] = hhmm.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
   findAll() {
     return this.prisma.reserva.findMany({
       include: {
@@ -41,10 +51,31 @@ export class ReservasRepository {
 
   async create(dto: CreateReservaDto) {
     // HU‑05 → lógica de creación (NO SE TOCA)
-    const fechaBase = '1970-01-01';
-    const horaInicio = new Date(`${fechaBase}T${dto.horaInicio}:00`);
-    const horaFin = new Date(`${fechaBase}T${dto.horaFin}:00`);
+    const espacio = await this.prisma.espacio.findUnique({
+      where: { id: dto.espacioId },
+      include: { sede: true },
+    });
+
+    if (!espacio) {
+      throw new NotFoundException(
+        `Espacio #${dto.espacioId} no encontrado`,
+      );
+    }
+
+    const horaInicio = this.toUtcTime(dto.horaInicio);
+    const horaFin = this.toUtcTime(dto.horaFin);
     const fecha = new Date(dto.fecha);
+
+    const aperturaMin = this.toMinutes(espacio.sede.horarioApertura);
+    const cierreMin = this.toMinutes(espacio.sede.horarioCierre);
+    const inicioMin = this.toMinutes(dto.horaInicio);
+    const finMin = this.toMinutes(dto.horaFin);
+
+    if (inicioMin < aperturaMin || finMin > cierreMin) {
+      throw new BadRequestException(
+        `La reserva debe estar dentro del horario de la sede (${espacio.sede.horarioApertura}–${espacio.sede.horarioCierre})`,
+      );
+    }
 
     if (horaFin <= horaInicio) {
       throw new BadRequestException(
