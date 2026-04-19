@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Injectable,
   NotFoundException,
@@ -145,3 +146,121 @@ export class ReservasRepository {
     return this.prisma.reserva.delete({ where: { id } });
   }
 }
+=======
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { CreateReservaDto } from '../dto/create-reserva.dto';
+
+// Repository: maneja el acceso directo a la base de datos con Prisma.
+// Aquí solo hay consultas y operaciones de persistencia.
+@Injectable()
+export class ReservasRepository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  // Devuelve todas las reservas incluyendo usuario y sede.
+  findAll() {
+    return this.prisma.reserva.findMany({
+      include: {
+        usuario: true,
+        espacio: {
+          include: { sede: true },
+        },
+      },
+    });
+  }
+
+  // Busca una reserva por su ID. Lanza 404 si no existe.
+  async findOne(id: number) {
+    const reserva = await this.prisma.reserva.findUnique({
+      where: { id },
+      include: {
+        usuario: true,
+        espacio: {
+          include: { sede: true },
+        },
+      },
+    });
+
+    if (!reserva) {
+      throw new NotFoundException(`Reserva #${id} no encontrada`);
+    }
+
+    return reserva;
+  }
+
+  // Crea una reserva nueva después de validar horarios y conflictos.
+  async create(dto: CreateReservaDto) {
+    const fechaBase = '1970-01-01';
+    const horaInicio = new Date(`${fechaBase}T${dto.horaInicio}:00`);
+    const horaFin = new Date(`${fechaBase}T${dto.horaFin}:00`);
+    const fecha = new Date(dto.fecha);
+
+    if (horaFin <= horaInicio) {
+      throw new BadRequestException(
+        'La hora de fin debe ser posterior a la hora de inicio',
+      );
+    }
+
+    const conflicto = await this.prisma.reserva.findFirst({
+      where: {
+        espacioId: dto.espacioId,
+        fecha,
+        estado: 'activa',
+        AND: [
+          { horaInicio: { lt: horaFin } },
+          { horaFin: { gt: horaInicio } },
+        ],
+      },
+    });
+
+    if (conflicto) {
+      throw new BadRequestException(
+        'El espacio ya tiene una reserva activa en ese horario',
+      );
+    }
+
+    return this.prisma.reserva.create({
+      data: {
+        usuarioId: dto.usuarioId,
+        espacioId: dto.espacioId,
+        fecha,
+        horaInicio,
+        horaFin,
+        fechaCreacion: new Date(),
+        estado: 'activa',
+      },
+    });
+  }
+
+  // Actualiza solo el estado de la reserva.
+  async cancelarEstado(id: number) {
+    return this.prisma.reserva.update({
+      where: { id },
+      data: { estado: 'cancelada' },
+    });
+  }
+
+  // Devuelve el historial de reservas de un usuario, ordenado por fecha.
+  async findHistorial(usuarioId: number) {
+    const reservas = await this.prisma.reserva.findMany({
+      where: { usuarioId },
+      include: {
+        espacio: { include: { sede: true } },
+      },
+      orderBy: { fecha: 'desc' },
+    });
+
+    return reservas;
+  }
+
+  // Elimina una reserva después de verificar que existe.
+  async remove(id: number) {
+    await this.findOne(id);
+    return this.prisma.reserva.delete({ where: { id } });
+  }
+}
+>>>>>>> 252584c (Fix: comentario en módulo de reservas y detalles, ademas de creacíon de archivo .gitattributes 19/04/2026 13:73)
