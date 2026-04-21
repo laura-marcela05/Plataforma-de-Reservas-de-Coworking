@@ -48,6 +48,7 @@ export default function EspaciosPage() {
   const [dispLoading, setDispLoading] = useState(false);
   const [dispResultados, setDispResultados] = useState<Espacio[]>([]);
   const [dispTotal, setDispTotal] = useState<number>(0);
+  const sinSedesDisponibilidad = sedes.length === 0;
 
   // ✅ Helper seguro para sacar el mensaje del error SIN any
   const getErrorMessage = (e: unknown) => {
@@ -164,6 +165,13 @@ export default function EspaciosPage() {
   const consultarDisponibilidadUI = async () => {
     setDispMsg(null);
 
+    if (sinSedesDisponibilidad) {
+      setDispMsg(
+        "Prerequisito: primero crea al menos una sede para consultar disponibilidad.",
+      );
+      return;
+    }
+
     // Validaciones HU-04 (frontend)
     if (!dispSedeId || !dispFecha || !dispHoraInicio || !dispHoraFin) {
       setDispMsg("Debe completar sede, fecha, hora inicio y hora fin.");
@@ -231,15 +239,25 @@ export default function EspaciosPage() {
                   setDispSedeId(e.target.value);
                   setDispMsg(null);
                 }}
+                disabled={sinSedesDisponibilidad}
                 className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="">Seleccione sede</option>
+                <option value="">
+                  {sinSedesDisponibilidad
+                    ? "No hay sedes disponibles"
+                    : "Seleccione sede"}
+                </option>
                 {sedes.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.nombre}
                   </option>
                 ))}
               </select>
+              {sinSedesDisponibilidad && (
+                <p className="mt-1 text-xs text-amber-700">
+                  Prerequisito: crea una sede en el modulo Sedes.
+                </p>
+              )}
             </div>
 
             {/* Fecha */}
@@ -291,7 +309,7 @@ export default function EspaciosPage() {
             <button
               type="button"
               onClick={consultarDisponibilidadUI}
-              disabled={dispLoading}
+              disabled={dispLoading || sinSedesDisponibilidad}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
             >
               {dispLoading ? "Consultando..." : "Consultar"}

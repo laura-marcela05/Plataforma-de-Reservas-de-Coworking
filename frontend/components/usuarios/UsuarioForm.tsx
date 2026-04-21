@@ -52,6 +52,7 @@ export default function UsuarioForm({
   );
 
   const [error, setError] = useState<string | null>(null);
+  const sinMembresias = membresias.length === 0;
 
   // ✅ Al montar el componente, carga las membresías desde el backend
   // Si es creación y el formulario tiene membresiaId=0, se asigna el ID de la primera membresía disponible
@@ -97,6 +98,13 @@ export default function UsuarioForm({
     setError(null);
 
     const esEdicion = !!inicial;
+
+    if (!esEdicion && sinMembresias) {
+      setError(
+        "No hay membresias creadas. Primero crea una membresia en el modulo Membresias.",
+      );
+      return;
+    }
 
     // ✅ Validación de teléfono (obligatorio en creación y edición)
     if (!form.telefono) {
@@ -211,8 +219,10 @@ export default function UsuarioForm({
           name="membresiaId"
           value={form.membresiaId}
           onChange={handleChange}
+          disabled={sinMembresias}
           className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
+          {sinMembresias && <option value={0}>No hay membresias disponibles</option>}
           {/* ✅ Opciones generadas dinámicamente desde el backend
               El value usa el ID real de la BD, no un número hardcodeado */}
           {membresias.map((m) => (
@@ -221,6 +231,11 @@ export default function UsuarioForm({
             </option>
           ))}
         </select>
+        {sinMembresias && (
+          <p className="text-amber-700 text-xs">
+            Prerequisito: crea al menos una membresia antes de registrar usuarios.
+          </p>
+        )}
       </div>
 
       {error && (
@@ -239,7 +254,7 @@ export default function UsuarioForm({
         </button>
         <button
           type="submit"
-          disabled={cargando}
+          disabled={cargando || (!inicial && sinMembresias)}
           className="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 disabled:opacity-50"
         >
           {cargando ? "Guardando..." : inicial ? "Actualizar" : "Crear"}

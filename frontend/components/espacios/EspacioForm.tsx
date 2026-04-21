@@ -27,6 +27,9 @@ export default function EspacioForm({ inicial, onSubmit, onCancel, cargando }: P
   const [sedes, setSedes] = useState<Sede[]>([]);
   const [tipos, setTipos] = useState<TipoEspacio[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const esEdicion = !!inicial;
+  const sinSedes = sedes.length === 0;
+  const sinTipos = tipos.length === 0;
 
   useEffect(() => {
     sedesService.findAll().then(setSedes);
@@ -53,6 +56,13 @@ export default function EspacioForm({ inicial, onSubmit, onCancel, cargando }: P
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!esEdicion && (sinSedes || sinTipos)) {
+      setError(
+        "Faltan datos base. Primero crea una sede y un tipo de espacio.",
+      );
+      return;
+    }
 
     if (!form.nombre.trim()) {
       setError("El nombre es obligatorio.");
@@ -112,15 +122,21 @@ export default function EspacioForm({ inicial, onSubmit, onCancel, cargando }: P
           name="sedeId"
           value={form.sedeId}
           onChange={handleChange}
+          disabled={sinSedes}
           className="w-full border px-3 py-2 rounded"
         >
-          <option value={0}>Seleccione sede</option>
+          <option value={0}>{sinSedes ? "No hay sedes disponibles" : "Seleccione sede"}</option>
           {sedes.map((s) => (
             <option key={s.id} value={s.id}>
               {s.nombre}
             </option>
           ))}
         </select>
+        {sinSedes && (
+          <p className="text-amber-700 text-xs mt-1">
+            Prerequisito: crea al menos una sede en el modulo Sedes.
+          </p>
+        )}
       </div>
 
       <div>
@@ -129,15 +145,21 @@ export default function EspacioForm({ inicial, onSubmit, onCancel, cargando }: P
           name="tipoEspacioId"
           value={form.tipoEspacioId}
           onChange={handleChange}
+          disabled={sinTipos}
           className="w-full border px-3 py-2 rounded"
         >
-          <option value={0}>Seleccione tipo</option>
+          <option value={0}>{sinTipos ? "No hay tipos disponibles" : "Seleccione tipo"}</option>
           {tipos.map((t) => (
             <option key={t.id} value={t.id}>
               {t.nombre}
             </option>
           ))}
         </select>
+        {sinTipos && (
+          <p className="text-amber-700 text-xs mt-1">
+            Prerequisito: crea al menos un tipo en el modulo Tipos de Espacio.
+          </p>
+        )}
       </div>
 
       {error && (
@@ -148,7 +170,11 @@ export default function EspacioForm({ inicial, onSubmit, onCancel, cargando }: P
         <button type="button" onClick={onCancel} className="px-4 py-2 border rounded">
           Cancelar
         </button>
-        <button type="submit" disabled={cargando} className="px-4 py-2 bg-blue-600 text-white rounded">
+        <button
+          type="submit"
+          disabled={cargando || (!esEdicion && (sinSedes || sinTipos))}
+          className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+        >
           {cargando ? "Guardando..." : inicial ? "Actualizar" : "Crear"}
         </button>
       </div>

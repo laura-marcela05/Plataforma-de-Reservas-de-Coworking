@@ -70,6 +70,9 @@ export default function ReservasPage() {
     horaInicio: "",
     horaFin: "",
   });
+  const sinUsuarios = usuarios.length === 0;
+  const sinEspacios = espacios.length === 0;
+  const faltanPrerequisitos = sinUsuarios || sinEspacios;
 
   // ── Carga inicial ────────────────────────────────────────────────────────────
 
@@ -123,6 +126,19 @@ export default function ReservasPage() {
   };
 
   const handleSubmit = async () => {
+    if (faltanPrerequisitos) {
+      if (sinUsuarios && sinEspacios) {
+        setFormError(
+          "Faltan datos base: primero crea al menos un usuario y un espacio.",
+        );
+      } else if (sinUsuarios) {
+        setFormError("Falta crear al menos un usuario antes de reservar.");
+      } else {
+        setFormError("Falta crear al menos un espacio antes de reservar.");
+      }
+      return;
+    }
+
     const validacion = validarForm();
     if (validacion) {
       setFormError(validacion);
@@ -214,11 +230,23 @@ export default function ReservasPage() {
                 setFormError(null);
                 setMostrarForm((v) => !v);
               }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+              disabled={faltanPrerequisitos}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
             >
               {mostrarForm ? "Cancelar" : "Nueva reserva"}
             </button>
           </div>
+
+          {faltanPrerequisitos && (
+            <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
+              {sinUsuarios && sinEspacios &&
+                "Prerequisito: crea al menos un usuario y un espacio antes de registrar reservas."}
+              {sinUsuarios && !sinEspacios &&
+                "Prerequisito: crea al menos un usuario antes de registrar reservas."}
+              {!sinUsuarios && sinEspacios &&
+                "Prerequisito: crea al menos un espacio antes de registrar reservas."}
+            </p>
+          )}
 
           {/* Mensaje de éxito */}
           {exito && (
@@ -244,9 +272,10 @@ export default function ReservasPage() {
                     name="usuarioId"
                     value={form.usuarioId || ""}
                     onChange={handleChange}
+                    disabled={sinUsuarios}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   >
-                    <option value="">Seleccione usuario</option>
+                    <option value="">{sinUsuarios ? "No hay usuarios disponibles" : "Seleccione usuario"}</option>
                     {usuarios.map((u) => (
                       <option key={u.id} value={u.id}>
                         {u.nombre} {u.apellido} — {u.correo}
@@ -264,9 +293,10 @@ export default function ReservasPage() {
                     name="espacioId"
                     value={form.espacioId || ""}
                     onChange={handleChange}
+                    disabled={sinEspacios}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   >
-                    <option value="">Seleccione espacio</option>
+                    <option value="">{sinEspacios ? "No hay espacios disponibles" : "Seleccione espacio"}</option>
                     {espacios.map((e) => (
                       <option key={e.id} value={e.id}>
                         {e.nombre} — {e.sede?.nombre ?? `Sede #${e.sedeId}`}
@@ -337,7 +367,7 @@ export default function ReservasPage() {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  disabled={guardando}
+                  disabled={guardando || faltanPrerequisitos}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
                 >
                   {guardando ? "Creando..." : "Crear reserva"}
