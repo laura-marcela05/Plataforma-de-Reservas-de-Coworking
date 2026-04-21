@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateMembresiaDto } from '../dto/create-membresia.dto';
 import { UpdateMembresiaDto } from '../dto/update-membresia.dto';
@@ -18,12 +18,44 @@ export class MembresiasRepository {
     return membresia;
   }
 
-  create(dto: CreateMembresiaDto) {
-    return this.prisma.membresia.create({ data: dto });
+  async create(dto: CreateMembresiaDto) {
+    const tipoNormalizado = dto.tipo.trim();
+
+    const existente = await this.prisma.membresia.findFirst({
+      where: { tipo: { equals: tipoNormalizado, mode: 'insensitive' } },
+    });
+
+    if (existente) {
+      throw new ConflictException('Ya existe una membresía con ese tipo.');
+    }
+
+    return this.prisma.membresia.create({
+      data: { ...dto, tipo: tipoNormalizado },
+    });
   }
 
   async update(id: number, dto: UpdateMembresiaDto) {
     await this.findOne(id);
+
+    if (dto.tipo !== undefined) {
+      const tipoNormalizado = dto.tipo.trim();
+      const existente = await this.prisma.membresia.findFirst({
+        where: {
+          tipo: { equals: tipoNormalizado, mode: 'insensitive' },
+          NOT: { id },
+        },
+      });
+
+      if (existente) {
+        throw new ConflictException('Ya existe una membresía con ese tipo.');
+      }
+
+      return this.prisma.membresia.update({
+        where: { id },
+        data: { ...dto, tipo: tipoNormalizado },
+      });
+    }
+
     return this.prisma.membresia.update({ where: { id }, data: dto });
   }
 

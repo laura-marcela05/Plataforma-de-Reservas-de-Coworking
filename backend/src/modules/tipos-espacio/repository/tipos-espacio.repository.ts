@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateTipoEspacioDto } from '../dto/create-tipo-espacio.dto';
 import { UpdateTipoEspacioDto } from '../dto/update-tipo-espacio.dto';
@@ -17,12 +17,44 @@ export class TiposEspacioRepository {
     return tipo;
   }
 
-  create(dto: CreateTipoEspacioDto) {
-    return this.prisma.tipoEspacio.create({ data: dto });
+  async create(dto: CreateTipoEspacioDto) {
+    const nombreNormalizado = dto.nombre.trim();
+
+    const existente = await this.prisma.tipoEspacio.findFirst({
+      where: { nombre: { equals: nombreNormalizado, mode: 'insensitive' } },
+    });
+
+    if (existente) {
+      throw new ConflictException('Ya existe un tipo de espacio con ese nombre.');
+    }
+
+    return this.prisma.tipoEspacio.create({
+      data: { ...dto, nombre: nombreNormalizado },
+    });
   }
 
   async update(id: number, dto: UpdateTipoEspacioDto) {
     await this.findOne(id);
+
+    if (dto.nombre !== undefined) {
+      const nombreNormalizado = dto.nombre.trim();
+      const existente = await this.prisma.tipoEspacio.findFirst({
+        where: {
+          nombre: { equals: nombreNormalizado, mode: 'insensitive' },
+          NOT: { id },
+        },
+      });
+
+      if (existente) {
+        throw new ConflictException('Ya existe un tipo de espacio con ese nombre.');
+      }
+
+      return this.prisma.tipoEspacio.update({
+        where: { id },
+        data: { ...dto, nombre: nombreNormalizado },
+      });
+    }
+
     return this.prisma.tipoEspacio.update({ where: { id }, data: dto });
   }
 
