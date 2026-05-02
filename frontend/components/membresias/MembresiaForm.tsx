@@ -46,18 +46,23 @@ export default function MembresiaForm({
     >
       <div className="flex flex-col gap-1 md:col-span-2">
         <label className="text-sm font-medium text-gray-700">Tipo</label>
-        <input
-          type="text"
+        <select
           name="tipo"
           value={form.tipo}
           onChange={(e) => {
             setForm({ tipo: e.target.value });
             setError(null);
           }}
-          placeholder="Ej: Premium"
           required
           className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        >
+          <option value="" disabled>
+            Selecciona una membresía
+          </option>
+          <option value="Básica">Básica</option>
+          <option value="Premium">Premium</option>
+          <option value="Corporativa">Corporativa</option>
+        </select>
       </div>
 
       {error && (

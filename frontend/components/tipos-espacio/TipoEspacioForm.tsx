@@ -46,18 +46,24 @@ export default function TipoEspacioForm({
     >
       <div className="flex flex-col gap-1 md:col-span-2">
         <label className="text-sm font-medium text-gray-700">Nombre</label>
-        <input
-          type="text"
+        <select
           name="nombre"
           value={form.nombre}
           onChange={(e) => {
             setForm({ nombre: e.target.value });
             setError(null);
           }}
-          placeholder="Ej: Sala de reuniones"
           required
           className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        >
+          <option value="" disabled>
+            Selecciona un tipo de espacio
+          </option>
+          <option value="Escritorio individual">Escritorio individual</option>
+          <option value="Sala de reuniones">Sala de reuniones</option>
+          <option value="Sala de conferencias">Sala de conferencias</option>
+          <option value="Auditorio">Auditorio</option>
+        </select>
       </div>
 
       {error && (

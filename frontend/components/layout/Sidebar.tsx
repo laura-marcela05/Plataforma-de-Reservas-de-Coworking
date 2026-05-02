@@ -12,6 +12,7 @@ const navItems = [
   { href: "/espacios", label: "Espacios y Disponibilidad" },
   { href: "/tarifas", label: "Tarifas" },
   { href: "/reservas", label: "Reservas" },
+  { href: "/reservas/historial", label: "Historial de Reservas" },
 ];
 
 export default function Sidebar() {

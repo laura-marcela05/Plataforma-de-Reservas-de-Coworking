@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   reservasService,
   type CreateReservaDto,
@@ -24,6 +25,14 @@ const ESTADO_BADGE: Record<string, string> = {
   cancelada: "bg-red-100 text-red-700",
   finalizada: "bg-gray-100 text-gray-600",
 };
+
+const pad2 = (value: number) => value.toString().padStart(2, "0");
+
+const formatLocalDate = (date: Date): string =>
+  `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+
+const formatLocalTime = (date: Date): string =>
+  `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
 
 // ✅ HU-05: extrae "HH:mm" desde el string DateTime que devuelve Prisma (@db.Time)
 const formatHora = (hora: string): string => {
@@ -120,6 +129,18 @@ export default function ReservasPage() {
     if (!form.fecha) return "Debe ingresar una fecha.";
     if (!form.horaInicio) return "Debe ingresar la hora de inicio.";
     if (!form.horaFin) return "Debe ingresar la hora de fin.";
+
+    const ahora = new Date();
+    const fechaHoraInicio = new Date(`${form.fecha}T${form.horaInicio}:00`);
+
+    if (Number.isNaN(fechaHoraInicio.getTime())) {
+      return "Debe ingresar una fecha y hora válidas.";
+    }
+
+    if (fechaHoraInicio <= ahora) {
+      return "La reserva debe iniciar después de la fecha y hora actuales.";
+    }
+
     if (form.horaFin <= form.horaInicio)
       return "La hora de fin debe ser posterior a la hora de inicio.";
     return null;
@@ -190,6 +211,10 @@ export default function ReservasPage() {
     });
   };
 
+  const hoy = formatLocalDate(new Date());
+  const horaActual = formatLocalTime(new Date());
+  const minHoraInicio = form.fecha === hoy ? horaActual : undefined;
+
   // ── HU-06: cancelar reserva ─────────────────────────────────────
   const cancelarReserva = async (id: number) => {
     const confirmar = window.confirm(
@@ -235,6 +260,13 @@ export default function ReservasPage() {
             >
               {mostrarForm ? "Cancelar" : "Nueva reserva"}
             </button>
+
+            <Link
+              href="/reservas/historial"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
+            >
+              Ver historial
+            </Link>
           </div>
 
           {faltanPrerequisitos && (
@@ -315,6 +347,7 @@ export default function ReservasPage() {
                     name="fecha"
                     value={form.fecha}
                     onChange={handleChange}
+                    min={hoy}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
                 </div>
@@ -330,6 +363,7 @@ export default function ReservasPage() {
                     step={60}
                     value={form.horaInicio}
                     onChange={handleChange}
+                    min={minHoraInicio}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
                 </div>
@@ -345,6 +379,7 @@ export default function ReservasPage() {
                     step={60}
                     value={form.horaFin}
                     onChange={handleChange}
+                    min={form.horaInicio || undefined}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   />
                 </div>

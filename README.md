@@ -432,7 +432,7 @@ npx prisma generate
 | 🏁 Sprint 3           | [Milestone](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/milestone/3) |
 | 🏁 Sprint 4           | [Milestone](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/milestone/4) |
 | 🏁 Sprint 5           | [Milestone](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/milestone/5) |
-| 📖 Definition of Done | [Issue #17](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/issues/11)   |
+| 📖 Definition of Done | [Issue #11](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/issues/11)   |
 
 ---
 

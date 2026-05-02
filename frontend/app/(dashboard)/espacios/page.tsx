@@ -178,6 +178,15 @@ export default function EspaciosPage() {
       return;
     }
 
+    // Fecha en el pasado → mensaje claro
+    const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    if (dispFecha < todayStr) {
+      setDispMsg("Fecha expirada: la fecha seleccionada ya pasó. No disponible.");
+      setDispResultados([]);
+      setDispTotal(0);
+      return;
+    }
+
     if (dispHoraFin <= dispHoraInicio) {
       setDispMsg("La hora fin debe ser posterior a la hora inicio.");
       return;
