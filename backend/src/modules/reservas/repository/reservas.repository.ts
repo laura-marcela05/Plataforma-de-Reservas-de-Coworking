@@ -61,9 +61,17 @@ export class ReservasRepository {
       throw new NotFoundException(`Espacio #${dto.espacioId} no encontrado`);
     }
 
+    const fecha = new Date(`${dto.fecha}T00:00:00`);
+    const inicioReserva = new Date(`${dto.fecha}T${dto.horaInicio}:00`);
+    const ahora = new Date();
     const horaInicio = this.toUtcTime(dto.horaInicio);
     const horaFin = this.toUtcTime(dto.horaFin);
-    const fecha = new Date(dto.fecha);
+
+    if (inicioReserva <= ahora) {
+      throw new BadRequestException(
+        "La reserva debe iniciar después de la fecha y hora actuales",
+      );
+    }
 
     const aperturaMin = this.toMinutes(espacio.sede.horarioApertura);
     const cierreMin = this.toMinutes(espacio.sede.horarioCierre);
@@ -122,9 +130,14 @@ export class ReservasRepository {
     const reservas = await this.prisma.reserva.findMany({
       where: { usuarioId },
       include: {
+        usuario: true,
         espacio: { include: { sede: true } },
       },
-      orderBy: { fecha: "desc" },
+      orderBy: [
+        { fecha: "desc" },
+        { horaInicio: "desc" },
+        { createdAt: "desc" },
+      ],
     });
 
     if (!reservas.length) {
@@ -137,5 +150,49 @@ export class ReservasRepository {
   async remove(id: number) {
     await this.findOne(id);
     return this.prisma.reserva.delete({ where: { id } });
+  }
+
+  // HU-07 → auto-finalize expired reservations
+  async finalizarReservasExpiradas() {
+    const ahora = new Date();
+
+    // Encuentra todas las reservas activas donde la fecha+horaFin ya pasó
+    const reservasExpiradas = await this.prisma.reserva.findMany({
+      where: {
+        estado: "activa",
+        OR: [
+          {
+            // fecha < today
+            fecha: { lt: ahora },
+          },
+          {
+            // fecha = today AND horaFin <= now
+            AND: [
+              { fecha: { equals: new Date(ahora.toDateString()) } },
+              { horaFin: { lte: ahora } },
+            ],
+          },
+        ],
+      },
+    });
+
+    if (reservasExpiradas.length === 0) {
+      return { mensaje: "No hay reservas expiradas para finalizar", actualizadas: 0 };
+    }
+
+    // Marca todas como finalizada
+    await this.prisma.reserva.updateMany({
+      where: {
+        id: {
+          in: reservasExpiradas.map((r) => r.id),
+        },
+      },
+      data: { estado: "finalizada" },
+    });
+
+    return {
+      mensaje: `${reservasExpiradas.length} reserva(s) expirada(s) finalizada(s)`,
+      actualizadas: reservasExpiradas.length,
+    };
   }
 }

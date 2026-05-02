@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateMembresiaDto } from '../dto/create-membresia.dto';
 import { UpdateMembresiaDto } from '../dto/update-membresia.dto';
@@ -21,6 +21,17 @@ export class MembresiasRepository {
   async create(dto: CreateMembresiaDto) {
     const tipoNormalizado = dto.tipo.trim();
 
+    // Validar tipos permitidos
+    const allowed = ['basica', 'premium', 'corporativa'];
+    const tipoNormSimple = tipoNormalizado
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+    if (!allowed.includes(tipoNormSimple)) {
+      throw new BadRequestException(`Tipo de membresía inválido. Opciones permitidas: ${allowed.join(', ')}`);
+    }
+
     const existente = await this.prisma.membresia.findFirst({
       where: { tipo: { equals: tipoNormalizado, mode: 'insensitive' } },
     });
@@ -39,6 +50,18 @@ export class MembresiasRepository {
 
     if (dto.tipo !== undefined) {
       const tipoNormalizado = dto.tipo.trim();
+
+      // Validar tipos permitidos
+      const allowed = ['basica', 'premium', 'corporativa'];
+      const tipoNormSimple = tipoNormalizado
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+      if (!allowed.includes(tipoNormSimple)) {
+        throw new BadRequestException(`Tipo de membresía inválido. Opciones permitidas: ${allowed.join(', ')}`);
+      }
+
       const existente = await this.prisma.membresia.findFirst({
         where: {
           tipo: { equals: tipoNormalizado, mode: 'insensitive' },

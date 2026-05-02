@@ -11,6 +11,21 @@ import { UpdateTarifaDto } from '../dto/update-tarifa.dto';
 export class TarifasRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  private async validarRelaciones(tipoEspacioId: number, membresiaId: number) {
+    const [tipoEspacio, membresia] = await Promise.all([
+      this.prisma.tipoEspacio.findUnique({ where: { id: tipoEspacioId } }),
+      this.prisma.membresia.findUnique({ where: { id: membresiaId } }),
+    ]);
+
+    if (!tipoEspacio) {
+      throw new NotFoundException(`Tipo de espacio #${tipoEspacioId} no encontrado`);
+    }
+
+    if (!membresia) {
+      throw new NotFoundException(`Membresía #${membresiaId} no encontrada`);
+    }
+  }
+
   findAll() {
     return this.prisma.tarifa.findMany({
       include: { tipoEspacio: true, membresia: true },
@@ -27,6 +42,8 @@ export class TarifasRepository {
   }
 
   async create(dto: CreateTarifaDto) {
+    await this.validarRelaciones(dto.tipoEspacioId, dto.membresiaId);
+
     const existe = await this.prisma.tarifa.findUnique({
       where: {
         tipoEspacioId_membresiaId: {
@@ -41,7 +58,25 @@ export class TarifasRepository {
   }
 
   async update(id: number, dto: UpdateTarifaDto) {
-    await this.findOne(id);
+    const actual = await this.findOne(id);
+
+    const tipoEspacioId = dto.tipoEspacioId ?? actual.tipoEspacioId;
+    const membresiaId = dto.membresiaId ?? actual.membresiaId;
+
+    await this.validarRelaciones(tipoEspacioId, membresiaId);
+
+    const existe = await this.prisma.tarifa.findFirst({
+      where: {
+        tipoEspacioId,
+        membresiaId,
+        NOT: { id },
+      },
+    });
+
+    if (existe) {
+      throw new ConflictException('Ya existe una tarifa para esa combinación');
+    }
+
     return this.prisma.tarifa.update({ where: { id }, data: dto });
   }
 

@@ -1,7 +1,8 @@
-import { IsInt, IsNumber } from 'class-validator';
+import { IsInt, IsNumber, IsPositive } from 'class-validator';
 
 export class CreateTarifaDto {
   @IsNumber()
+  @IsPositive()
   precioHora: number;
 
   @IsInt()

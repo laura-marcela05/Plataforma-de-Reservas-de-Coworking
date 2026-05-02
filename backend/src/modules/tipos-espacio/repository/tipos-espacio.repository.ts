@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateTipoEspacioDto } from '../dto/create-tipo-espacio.dto';
 import { UpdateTipoEspacioDto } from '../dto/update-tipo-espacio.dto';
@@ -20,6 +20,22 @@ export class TiposEspacioRepository {
   async create(dto: CreateTipoEspacioDto) {
     const nombreNormalizado = dto.nombre.trim();
 
+    // Validar tipos permitidos
+    const allowed = [
+      'escritorio individual',
+      'sala de reuniones',
+      'sala de conferencias',
+      'auditorio',
+    ];
+    const nombreNormSimple = nombreNormalizado
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+    if (!allowed.includes(nombreNormSimple)) {
+      throw new BadRequestException(`Tipo de espacio inválido. Opciones permitidas: ${allowed.join(', ')}`);
+    }
+
     const existente = await this.prisma.tipoEspacio.findFirst({
       where: { nombre: { equals: nombreNormalizado, mode: 'insensitive' } },
     });
@@ -38,6 +54,23 @@ export class TiposEspacioRepository {
 
     if (dto.nombre !== undefined) {
       const nombreNormalizado = dto.nombre.trim();
+
+      // Validar tipos permitidos
+      const allowed = [
+        'escritorio individual',
+        'sala de reuniones',
+        'sala de conferencias',
+        'auditorio',
+      ];
+      const nombreNormSimple = nombreNormalizado
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+      if (!allowed.includes(nombreNormSimple)) {
+        throw new BadRequestException(`Tipo de espacio inválido. Opciones permitidas: ${allowed.join(', ')}`);
+      }
+
       const existente = await this.prisma.tipoEspacio.findFirst({
         where: {
           nombre: { equals: nombreNormalizado, mode: 'insensitive' },

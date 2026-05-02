@@ -7,6 +7,7 @@ import {
   Body,
   Patch,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ReservasService } from '../service/reservas.service';
 import { CreateReservaDto } from '../dto/create-reserva.dto';
@@ -27,8 +28,15 @@ export class ReservasController {
   // GET /reservas/historial?usuarioId=123
   // Devuelve el historial de reservas de un usuario.
   @Get('historial')
-  findHistorial(@Query('usuarioId') usuarioId: string) {
-    return this.service.findHistorial(+usuarioId);
+  findHistorial(@Query('usuarioId', ParseIntPipe) usuarioId: number) {
+    return this.service.findHistorial(usuarioId);
+  }
+
+  // GET /reservas/finalize-expired
+  // Finaliza automáticamente todas las reservas expiradas.
+  @Get('finalize-expired')
+  finalizarExpiradas() {
+    return this.service.finalizarExpiradas();
   }
 
   // GET /reservas/:id

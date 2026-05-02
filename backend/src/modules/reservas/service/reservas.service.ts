@@ -58,11 +58,20 @@ export class ReservasService {
 
   // Devuelve el historial de reservas de un usuario.
   findHistorial(usuarioId: number) {
+    if (!usuarioId || usuarioId <= 0) {
+      throw new BadRequestException('Debe indicar un usuarioId válido');
+    }
+
     return this.repository.findHistorial(usuarioId);
   }
 
   // Elimina una reserva de la base de datos.
   remove(id: number) {
     return this.repository.remove(id);
+  }
+
+  // HU-07 → auto-finaliza reservas expiradas
+  finalizarExpiradas() {
+    return this.repository.finalizarReservasExpiradas();
   }
 }
