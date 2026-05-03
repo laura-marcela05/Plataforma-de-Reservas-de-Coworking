@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { espaciosService, type CreateEspacioDto } from "@/services/espacios.service";
+import {
+  espaciosService,
+  type CreateEspacioDto,
+} from "@/services/espacios.service";
 import { sedesService } from "@/services/sedes.service";
 
 import type { Espacio } from "@/interfaces/espacio.interface";
@@ -130,7 +133,7 @@ export default function EspaciosPage() {
     } catch (e: unknown) {
       setAccionError(
         getErrorMessage(e) ||
-          "No se pudo guardar el espacio. Verifica los datos o puede haber reservas activas asociadas."
+          "No se pudo guardar el espacio. Verifica los datos o puede haber reservas activas asociadas.",
       );
     } finally {
       setGuardando(false);
@@ -154,7 +157,8 @@ export default function EspaciosPage() {
       await cargarEspacios(sedeIdNum);
     } catch (e: unknown) {
       setAccionError(
-        getErrorMessage(e) || "No se puede eliminar: el espacio tiene reservas activas."
+        getErrorMessage(e) ||
+          "No se puede eliminar: el espacio tiene reservas activas.",
       );
     }
   };
@@ -181,7 +185,9 @@ export default function EspaciosPage() {
     // Fecha en el pasado → mensaje claro
     const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
     if (dispFecha < todayStr) {
-      setDispMsg("Fecha expirada: la fecha seleccionada ya pasó. No disponible.");
+      setDispMsg(
+        "Fecha expirada: la fecha seleccionada ya pasó. No disponible.",
+      );
       setDispResultados([]);
       setDispTotal(0);
       return;
@@ -206,7 +212,10 @@ export default function EspaciosPage() {
       setDispTotal(data.total);
 
       if (data.total === 0) {
-        setDispMsg(data.mensaje || "No hay espacios disponibles para el rango seleccionado.");
+        setDispMsg(
+          data.mensaje ||
+            "No hay espacios disponibles para el rango seleccionado.",
+        );
       } else {
         setDispMsg(null);
       }
@@ -233,7 +242,8 @@ export default function EspaciosPage() {
                 Consultar disponibilidad
               </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Selecciona sede, fecha y rango horario (24h) para ver espacios libres.
+                Selecciona sede, fecha y rango horario (24h) para ver espacios
+                libres.
               </p>
             </div>
           </div>
@@ -285,7 +295,9 @@ export default function EspaciosPage() {
 
             {/* Hora inicio */}
             <div>
-              <label className="text-xs font-medium text-gray-600">Hora inicio</label>
+              <label className="text-xs font-medium text-gray-600">
+                Hora inicio
+              </label>
               <input
                 type="time"
                 step={60}
@@ -300,7 +312,9 @@ export default function EspaciosPage() {
 
             {/* Hora fin */}
             <div>
-              <label className="text-xs font-medium text-gray-600">Hora fin</label>
+              <label className="text-xs font-medium text-gray-600">
+                Hora fin
+              </label>
               <input
                 type="time"
                 step={60}
@@ -327,7 +341,9 @@ export default function EspaciosPage() {
 
           {/* Mensajes */}
           {dispMsg && (
-            <p className={`mt-3 text-sm ${dispMsg.includes("No hay") ? "text-gray-600" : dispMsg.includes("Error") ? "text-red-500" : "text-red-500"}`}>
+            <p
+              className={`mt-3 text-sm ${dispMsg.includes("No hay") ? "text-gray-600" : dispMsg.includes("Error") ? "text-red-500" : "text-red-500"}`}
+            >
               {dispMsg}
             </p>
           )}
@@ -354,7 +370,9 @@ export default function EspaciosPage() {
                     <tr key={e.id} className="border-b border-gray-100">
                       <td className="p-3">{e.id}</td>
                       <td className="p-3">{e.nombre}</td>
-                      <td className="p-3">{e.tipoEspacio?.nombre ?? e.tipoEspacioId}</td>
+                      <td className="p-3">
+                        {e.tipoEspacio?.nombre ?? e.tipoEspacioId}
+                      </td>
                       <td className="p-3">{e.capacidad}</td>
                       <td className="p-3">{e.sede?.nombre ?? e.sedeId}</td>
                     </tr>
@@ -367,19 +385,39 @@ export default function EspaciosPage() {
       </section>
 
       {/* =========================
-          CARD 2: GESTIÓN DE ESPACIOS (HU-03)
-         ========================= */}
+    CARD 2: GESTIÓN DE ESPACIOS (HU-03)
+   ========================= */}
       <section className="bg-white border border-gray-200 rounded-xl shadow-sm">
         <div className="p-6">
           <div className="flex items-start justify-between gap-4 flex-wrap">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">Gestión de espacios</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Crea, edita y elimina espacios. Filtra por sede o busca por ID.
-              </p>
+            {/* 🔷 HEADER MEJORADO */}
+            <div className="flex items-center gap-3">
+              {/* Icono */}
+              <div className="bg-blue-600 p-2 rounded-lg">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M3 21V3h18v18M9 21V9h6v12" />
+                </svg>
+              </div>
+
+              {/* Texto */}
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Gestión de espacios
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Administra espacios, disponibilidad y configuración
+                </p>
+              </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* 🔷 ACCIONES */}
+            <div className="flex items-center gap-3 flex-wrap">
               {/* Filtro por sede */}
               <select
                 value={sedeFiltro}
@@ -395,9 +433,9 @@ export default function EspaciosPage() {
                 ))}
               </select>
 
-              {/* Buscador por ID */}
+              {/* 🔍 Buscador */}
               <div className="flex flex-col items-end">
-                <div className="flex items-center">
+                <div className="flex items-center shadow-sm">
                   <input
                     value={buscarId}
                     onChange={(e) => {
@@ -406,20 +444,21 @@ export default function EspaciosPage() {
                       setBuscarError(null);
                     }}
                     onKeyDown={(e) => {
-                      if (["e", "E", "+", "-", ".", ","].includes(e.key)) e.preventDefault();
+                      if (["e", "E", "+", "-", ".", ","].includes(e.key))
+                        e.preventDefault();
                       if (e.key === "Enter") ejecutarBusqueda();
                     }}
                     inputMode="numeric"
-                    placeholder="Buscar por ID"
-                    className="px-3 py-2 border border-gray-300 rounded-l-lg text-sm w-40 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Buscar ID"
+                    className="px-3 py-2 border border-gray-300 rounded-l-lg text-sm w-36 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     disabled={buscando}
                   />
+
                   <button
                     type="button"
                     onClick={ejecutarBusqueda}
                     disabled={buscando}
                     className="px-3 py-2 border border-l-0 border-gray-300 rounded-r-lg bg-gray-50 hover:bg-gray-100 text-sm"
-                    aria-label="Buscar espacio por ID"
                     title="Buscar"
                   >
                     🔍
@@ -427,20 +466,20 @@ export default function EspaciosPage() {
                 </div>
 
                 {buscarError && (
-                  <p className="text-red-500 mt-2 text-sm">{buscarError}</p>
+                  <p className="text-red-500 mt-2 text-xs">{buscarError}</p>
                 )}
               </div>
 
-              {/* Botón Nuevo espacio */}
+              {/* ➕ Botón */}
               <button
                 onClick={() => {
                   setAccionError(null);
                   setEditando(null);
                   setMostrarForm(!mostrarForm);
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm shadow-sm transition"
               >
-                {mostrarForm ? "Cancelar" : "Nuevo espacio"}
+                {mostrarForm ? "Cancelar" : "＋ Nuevo espacio"}
               </button>
             </div>
           </div>

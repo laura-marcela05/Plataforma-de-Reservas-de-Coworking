@@ -152,7 +152,7 @@ export class ReservasRepository {
     return this.prisma.reserva.delete({ where: { id } });
   }
 
-  // HU-07 → auto-finalize expired reservations
+  // HU-07 → auto-finaliza reservas expiradas
   async finalizarReservasExpiradas() {
     const ahora = new Date();
 
@@ -162,11 +162,11 @@ export class ReservasRepository {
         estado: "activa",
         OR: [
           {
-            // fecha < today
+            // fecha anterior a hoy
             fecha: { lt: ahora },
           },
           {
-            // fecha = today AND horaFin <= now
+            // fecha = hoy AND horaFin <= ahora
             AND: [
               { fecha: { equals: new Date(ahora.toDateString()) } },
               { horaFin: { lte: ahora } },
@@ -177,15 +177,16 @@ export class ReservasRepository {
     });
 
     if (reservasExpiradas.length === 0) {
-      return { mensaje: "No hay reservas expiradas para finalizar", actualizadas: 0 };
+      return {
+        mensaje: "No hay reservas expiradas para finalizar",
+        actualizadas: 0,
+      };
     }
 
     // Marca todas como finalizada
     await this.prisma.reserva.updateMany({
       where: {
-        id: {
-          in: reservasExpiradas.map((r) => r.id),
-        },
+        id: { in: reservasExpiradas.map((r) => r.id) },
       },
       data: { estado: "finalizada" },
     });
@@ -194,5 +195,30 @@ export class ReservasRepository {
       mensaje: `${reservasExpiradas.length} reserva(s) expirada(s) finalizada(s)`,
       actualizadas: reservasExpiradas.length,
     };
+  }
+
+  // HU-10: Listado de reservas activas del día para una sede
+  async findActivasDelDia(sedeId: number, fecha: string) {
+    // Convertimos la fecha string a Date para la query
+    const fechaDate = new Date(`${fecha}T00:00:00`);
+
+    const reservas = await this.prisma.reserva.findMany({
+      where: {
+        estado: "activa",
+        fecha: fechaDate,
+        // Filtramos por sede a través de la relación con espacio
+        espacio: { sedeId },
+      },
+      include: {
+        // Traemos datos del usuario para mostrar nombre y apellido
+        usuario: true,
+        // Traemos datos del espacio con su sede y tipo
+        espacio: { include: { sede: true, tipoEspacio: true } },
+      },
+      // Ordenamos por hora de inicio para ver las más próximas primero
+      orderBy: { horaInicio: "asc" },
+    });
+
+    return reservas;
   }
 }

@@ -84,11 +84,14 @@ export default function ReservasPage() {
   const faltanPrerequisitos = sinUsuarios || sinEspacios;
 
   // ── Carga inicial ────────────────────────────────────────────────────────────
-
   const cargarTodo = async () => {
     try {
       setCargando(true);
       setError(null);
+
+      // Finaliza automáticamente las reservas expiradas antes de cargar
+      await reservasService.finalizarExpiradas().catch(() => {});
+
       const [u, e, r] = await Promise.all([
         usuariosService.findAll(),
         espaciosService.findAll(),
@@ -239,43 +242,71 @@ export default function ReservasPage() {
       <section className="bg-white border border-gray-200 rounded-xl shadow-sm">
         <div className="p-6">
           {/* Header */}
-          <div className="flex items-start justify-between gap-4 flex-wrap">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">
-                Gestión de reservas
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Crea reservas seleccionando usuario, espacio, fecha y horario.
-              </p>
+          <div className="flex items-start justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              {/* ICONO */}
+              <div className="bg-blue-600 p-2 rounded-lg">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Gestión de reservas
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Crea reservas seleccionando usuario, espacio, fecha y horario.
+                </p>
+              </div>
             </div>
+            {/* BOTONES AGRUPADOS */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => {
+                  setExito(null);
+                  setFormError(null);
+                  setMostrarForm((v) => !v);
+                }}
+                disabled={faltanPrerequisitos}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
+              >
+                {mostrarForm ? "Cancelar" : "Nueva reserva"}
+              </button>
 
-            <button
-              onClick={() => {
-                setExito(null);
-                setFormError(null);
-                setMostrarForm((v) => !v);
-              }}
-              disabled={faltanPrerequisitos}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50"
-            >
-              {mostrarForm ? "Cancelar" : "Nueva reserva"}
-            </button>
+              <Link
+                href="/reservas/historial"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
+              >
+                Ver historial
+              </Link>
 
-            <Link
-              href="/reservas/historial"
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
-            >
-              Ver historial
-            </Link>
+              {/* ✅ MISMO ESTILO */}
+              <Link
+                href="/reservas/activas"
+                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
+              >
+                Ver activas del día
+              </Link>
+            </div>
           </div>
 
           {faltanPrerequisitos && (
             <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2">
-              {sinUsuarios && sinEspacios &&
+              {sinUsuarios &&
+                sinEspacios &&
                 "Prerequisito: crea al menos un usuario y un espacio antes de registrar reservas."}
-              {sinUsuarios && !sinEspacios &&
+              {sinUsuarios &&
+                !sinEspacios &&
                 "Prerequisito: crea al menos un usuario antes de registrar reservas."}
-              {!sinUsuarios && sinEspacios &&
+              {!sinUsuarios &&
+                sinEspacios &&
                 "Prerequisito: crea al menos un espacio antes de registrar reservas."}
             </p>
           )}
@@ -307,7 +338,11 @@ export default function ReservasPage() {
                     disabled={sinUsuarios}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   >
-                    <option value="">{sinUsuarios ? "No hay usuarios disponibles" : "Seleccione usuario"}</option>
+                    <option value="">
+                      {sinUsuarios
+                        ? "No hay usuarios disponibles"
+                        : "Seleccione usuario"}
+                    </option>
                     {usuarios.map((u) => (
                       <option key={u.id} value={u.id}>
                         {u.nombre} {u.apellido} — {u.correo}
@@ -328,7 +363,11 @@ export default function ReservasPage() {
                     disabled={sinEspacios}
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   >
-                    <option value="">{sinEspacios ? "No hay espacios disponibles" : "Seleccione espacio"}</option>
+                    <option value="">
+                      {sinEspacios
+                        ? "No hay espacios disponibles"
+                        : "Seleccione espacio"}
+                    </option>
                     {espacios.map((e) => (
                       <option key={e.id} value={e.id}>
                         {e.nombre} — {e.sede?.nombre ?? `Sede #${e.sedeId}`}
@@ -462,32 +501,23 @@ export default function ReservasPage() {
                         className="border-b border-gray-100 hover:bg-gray-50"
                       >
                         <td className="p-3">{r.id}</td>
-
                         <td className="p-3">{r.usuarioId}</td>
-
                         <td className="p-3">{r.espacioId}</td>
-
                         <td className="p-3">
                           {new Date(r.fecha).toLocaleDateString("es-CO")}
                         </td>
-
-                        {/* Hora inicio */}
                         <td className="p-3">{formatHora(r.horaInicio)}</td>
-
-                        {/* Hora fin */}
                         <td className="p-3">{formatHora(r.horaFin)}</td>
-
-                        {/* ✅ Columna ESTADO */}
                         <td className="p-3">
                           <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${ESTADO_BADGE[r.estado] ?? "bg-gray-100 text-gray-600"
-                              }`}
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              ESTADO_BADGE[r.estado] ??
+                              "bg-gray-100 text-gray-600"
+                            }`}
                           >
                             {r.estado}
                           </span>
                         </td>
-
-                        {/* ✅ Columna ACCIONES (HU-06) */}
                         <td className="p-3">
                           {r.estado === "activa" && (
                             <button

@@ -13,6 +13,8 @@ const navItems = [
   { href: "/tarifas", label: "Tarifas" },
   { href: "/reservas", label: "Reservas" },
   { href: "/reservas/historial", label: "Historial de Reservas" },
+  { href: "/reservas/activas", label: "Reservas activas del día" },
+  { href: "/reportes", label: "Reporte de ocupación" },
 ];
 
 export default function Sidebar() {
@@ -20,15 +22,19 @@ export default function Sidebar() {
 
   return (
     <aside className="w-60 bg-white border-r border-gray-200 flex flex-col">
+      {/* Header */}
       <div className="px-6 py-5 border-b border-gray-200">
         <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
           Reservas Coworking
         </h2>
       </div>
+
+      {/* Navegación */}
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
+
           return (
             <Link
               key={item.href}
@@ -44,6 +50,8 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Footer */}
       <div className="px-6 py-4 border-t border-gray-200 text-xs text-gray-400">
         Programación Web — CORHUILA 2026A
       </div>

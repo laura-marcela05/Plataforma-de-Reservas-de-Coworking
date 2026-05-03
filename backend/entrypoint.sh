@@ -1,4 +1,4 @@
-﻿#!/bin/sh
+#!/bin/sh
 set -e
 
 # Evita estados inconsistentes de build incremental en volúmenes Docker.

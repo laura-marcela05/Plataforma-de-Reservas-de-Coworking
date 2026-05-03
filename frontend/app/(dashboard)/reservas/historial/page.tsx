@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { reservasService, type ReservaHistorial } from "@/services/reservas.service";
+import {
+  reservasService,
+  type ReservaHistorial,
+} from "@/services/reservas.service";
 
 const formatFecha = (value: string) =>
   new Date(value).toLocaleDateString("es-CO", {
@@ -83,7 +86,10 @@ function HistorialReservasContent() {
       const data = await reservasService.findHistorial(usuarioNum);
       setHistorial(data);
     } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : "No fue posible consultar el historial.";
+      const message =
+        e instanceof Error
+          ? e.message
+          : "No fue posible consultar el historial.";
       setError(message);
       setHistorial([]);
     } finally {
@@ -106,138 +112,123 @@ function HistorialReservasContent() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Historial de Reservas</h1>
+      {/* =========================
+        CARD: HISTORIAL
+       ========================= */}
+      <section className="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div className="p-6">
+          {/* HEADER CON ICONO */}
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <div className="bg-indigo-600 p-2 rounded-lg">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
 
-        <Link
-          href="/reservas"
-          className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-        >
-          Volver a reservas
-        </Link>
-      </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Historial de reservas
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Consulta todas las reservas de un usuario
+                </p>
+              </div>
+            </div>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <div className="grid gap-3 md:grid-cols-[1fr_auto]">
-          <div className="flex flex-col gap-2 md:flex-row md:items-center">
-            <label className="text-sm font-medium text-gray-700 md:mr-3">
-              ID del usuario
-            </label>
-            <input
-              value={usuarioId}
-              onChange={(e) => {
-                const onlyDigits = e.target.value.replace(/\D/g, "");
-                setUsuarioId(onlyDigits);
-                setError(null);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") void consultarHistorial();
-                if (["e", "E", "+", "-", ",", "."].includes(e.key)) {
-                  e.preventDefault();
-                }
-              }}
-              inputMode="numeric"
-              placeholder="Ej: 12"
-              className="rounded border border-gray-300 px-3 py-2 text-gray-900 placeholder:text-gray-500 outline-none focus:border-blue-500 md:max-w-64"
-            />
+            <Link
+              href="/reservas"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50 transition"
+            >
+              ← Volver
+            </Link>
           </div>
 
-          <button
-            type="button"
-            onClick={() => void consultarHistorial()}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
-          >
-            {cargando ? "Consultando..." : "Consultar historial"}
-          </button>
-        </div>
-      </div>
+          {/* FILTRO */}
+          <div className="mt-4 bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="flex flex-wrap gap-4 items-end">
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  ID Usuario
+                </label>
 
-      {(error || (consultado && historial.length === 0)) && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-6">
-          <h2 className="font-semibold text-red-800">
-            {error ? "No se pudo consultar" : "Sin reservas registradas"}
-          </h2>
-          <p className="mt-1 text-sm text-red-700">
-            {error ?? "Este usuario todavía no tiene reservas en el sistema."}
-          </p>
-        </div>
-      )}
+                <input
+                  value={usuarioId}
+                  onChange={(e) => setUsuarioId(e.target.value)}
+                  className="mt-1 block border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Ej: 1"
+                />
+              </div>
 
-      {historial.length > 0 && (
-        <>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <p className="text-xs font-semibold uppercase text-gray-500">Total</p>
-              <p className="mt-2 text-3xl font-bold text-gray-900">{resumen.total}</p>
-              <p className="mt-1 text-sm text-gray-600">Reservas encontradas</p>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <p className="text-xs font-semibold uppercase text-gray-500">Activas</p>
-              <p className="mt-2 text-3xl font-bold text-emerald-600">{resumen.activas}</p>
-              <p className="mt-1 text-sm text-gray-600">Reservas vigentes</p>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <p className="text-xs font-semibold uppercase text-gray-500">Canceladas</p>
-              <p className="mt-2 text-3xl font-bold text-red-600">{resumen.canceladas}</p>
-              <p className="mt-1 text-sm text-gray-600">Reservas anuladas</p>
+              <button
+                onClick={() => void consultarHistorial()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition"
+              >
+                Consultar
+              </button>
             </div>
           </div>
 
-          <div className="rounded-lg border border-gray-200 bg-white overflow-hidden shadow">
-            <div className="border-b border-gray-200 px-6 py-4">
-              <h2 className="text-lg font-semibold text-gray-900">
-                {usuario
-                  ? `${usuario.nombre} ${usuario.apellido}`
-                  : `Usuario #${usuarioId}`}
-              </h2>
-              {usuario && (
-                <p className="text-sm text-gray-600">{usuario.correo}</p>
-              )}
+          {/* ERROR */}
+          {error && (
+            <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4">
+              <p className="text-sm text-red-600">{error}</p>
             </div>
+          )}
 
-            <div className="overflow-x-auto">
+          {/* LOADING */}
+          {cargando && (
+            <p className="text-sm text-gray-500 mt-4">Cargando historial...</p>
+          )}
+
+          {/* TABLA */}
+          {!cargando && historial.length > 0 && (
+            <div className="mt-4 overflow-hidden rounded-lg border border-gray-200">
               <table className="min-w-full text-sm">
-                <thead className="border-t border-gray-200 bg-gray-50">
+                <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">Fecha</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">Horario</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">Espacio</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">Sede</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase text-gray-600">Estado</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                      Fecha
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                      Horario
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                      Espacio
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                      Estado
+                    </th>
                   </tr>
                 </thead>
+
                 <tbody className="divide-y divide-gray-200">
-                  {historial.map((reserva) => (
-                    <tr key={reserva.id} className="hover:shadow-sm hover:bg-gray-50 transition">
-                      <td className="px-6 py-4 align-top">
-                        <div className="text-sm font-semibold text-gray-900">{formatFecha(reserva.fecha)}</div>
+                  {historial.map((r) => (
+                    <tr key={r.id} className="hover:bg-gray-50 transition">
+                      <td className="px-6 py-4">{formatFecha(r.fecha)}</td>
+
+                      <td className="px-6 py-4">
+                        {formatHora(r.horaInicio)} — {formatHora(r.horaFin)}
                       </td>
 
-                      <td className="px-6 py-4 align-top">
-                        <div className="inline-flex items-center gap-2">
-                          <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
-                            {formatHora(reserva.horaInicio)}
-                          </span>
-                          <span className="text-sm text-gray-500">—</span>
-                          <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
-                            {formatHora(reserva.horaFin)}
-                          </span>
-                        </div>
+                      <td className="px-6 py-4">
+                        {r.espacio?.nombre ?? `Espacio #${r.espacioId}`}
                       </td>
 
-                      <td className="px-6 py-4 align-top">
-                        <div className="text-sm font-semibold text-gray-900">{reserva.espacio?.nombre ?? `Espacio #${reserva.espacioId}`}</div>
-                        <div className="text-xs text-gray-500 mt-1">{reserva.espacio?.descripcion ?? reserva.espacio?.tipoEspacio?.nombre ?? "Descripción no disponible"}</div>
-                      </td>
-
-                      <td className="px-6 py-4 align-top">
-                        <div className="text-sm text-gray-700">{reserva.espacio?.sede?.nombre ?? "Sin sede"}</div>
-                        <div className="text-xs text-gray-500 mt-1">{reserva.espacio?.sede?.direccion ?? "-"}</div>
-                      </td>
-
-                      <td className="px-6 py-4 align-top">
-                        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${ESTADO_STYLE[reserva.estado] ?? "bg-gray-100 text-gray-600"}`}>
-                          {reserva.estado}
+                      <td className="px-6 py-4">
+                        <span
+                          className={`px-3 py-1 text-xs rounded-full ${
+                            ESTADO_STYLE[r.estado] ??
+                            "bg-gray-100 text-gray-600"
+                          }`}
+                        >
+                          {r.estado}
                         </span>
                       </td>
                     </tr>
@@ -245,9 +236,15 @@ function HistorialReservasContent() {
                 </tbody>
               </table>
             </div>
-          </div>
-        </>
-      )}
+          )}
+
+          {!cargando && consultado && historial.length === 0 && (
+            <p className="text-sm text-gray-500 mt-4">
+              No hay reservas registradas para este usuario
+            </p>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

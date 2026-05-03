@@ -1,9 +1,6 @@
-import {
-  Injectable,
-  BadRequestException,
-} from '@nestjs/common';
-import { ReservasRepository } from '../repository/reservas.repository';
-import { CreateReservaDto } from '../dto/create-reserva.dto';
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { ReservasRepository } from "../repository/reservas.repository";
+import { CreateReservaDto } from "../dto/create-reserva.dto";
 
 // Servicio de reservas: aplica reglas de negocio y coordina consultas con el repository.
 @Injectable()
@@ -29,27 +26,21 @@ export class ReservasService {
   async cancelar(id: number) {
     const reserva = await this.repository.findOne(id);
 
-    if (reserva.estado !== 'activa') {
-      throw new BadRequestException(
-        'Solo se pueden cancelar reservas activas',
-      );
+    if (reserva.estado !== "activa") {
+      throw new BadRequestException("Solo se pueden cancelar reservas activas");
     }
 
     const ahora = new Date();
 
-    const fechaStr = reserva.fecha.toISOString().split('T')[0];
-    const horaStr = reserva.horaInicio
-      .toISOString()
-      .split('T')[1]
-      .slice(0, 5);
+    const fechaStr = reserva.fecha.toISOString().split("T")[0];
+    const horaStr = reserva.horaInicio.toISOString().split("T")[1].slice(0, 5);
 
     const inicio = new Date(`${fechaStr}T${horaStr}:00`);
-    const diffHoras =
-      (inicio.getTime() - ahora.getTime()) / (1000 * 60 * 60);
+    const diffHoras = (inicio.getTime() - ahora.getTime()) / (1000 * 60 * 60);
 
     if (diffHoras < 2) {
       throw new BadRequestException(
-        'Se necesitan al menos 2 horas de anticipación para cancelar',
+        "Se necesitan al menos 2 horas de anticipación para cancelar",
       );
     }
 
@@ -59,7 +50,7 @@ export class ReservasService {
   // Devuelve el historial de reservas de un usuario.
   findHistorial(usuarioId: number) {
     if (!usuarioId || usuarioId <= 0) {
-      throw new BadRequestException('Debe indicar un usuarioId válido');
+      throw new BadRequestException("Debe indicar un usuarioId válido");
     }
 
     return this.repository.findHistorial(usuarioId);
@@ -73,5 +64,31 @@ export class ReservasService {
   // HU-07 → auto-finaliza reservas expiradas
   finalizarExpiradas() {
     return this.repository.finalizarReservasExpiradas();
+  }
+
+  // HU-10: Devuelve las reservas activas del día para una sede
+  async findActivasDelDia(sedeId: number, fecha?: string) {
+    if (!sedeId || sedeId <= 0) {
+      throw new BadRequestException("Debe indicar un sedeId válido");
+    }
+
+    // Si no se envía fecha usamos el día actual en formato YYYY-MM-DD
+    const fechaConsulta = fecha ?? new Date().toISOString().split("T")[0];
+
+    const reservas = await this.repository.findActivasDelDia(
+      sedeId,
+      fechaConsulta,
+    );
+
+    // Si no hay reservas retornamos mensaje informativo
+    if (reservas.length === 0) {
+      return {
+        mensaje: "No hay reservas activas para el día seleccionado.",
+        total: 0,
+        reservas: [],
+      };
+    }
+
+    return { total: reservas.length, reservas };
   }
 }
