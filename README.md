@@ -264,6 +264,20 @@ Tarifa           N ──── N  TipoEspacio + Membresia
 
 ---
 
+## 🗺 Diagramas (C4 y otros)
+
+Se almacenan en la carpeta [Diagramas C4](Diagramas%20C4/) del repositorio. A continuación un resumen por nivel:
+
+| Nivel       | Diagrama                   | Descripción breve                                            | Archivo / Enlace                                                                 |
+| ----------- | -------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| Contexto    | Diagrama de Contexto       | Vista global: actores externos y sistemas integrados         | [c4_contexto_coworking.svg](Diagramas%20C4/c4_contexto_coworking.svg)            |
+| Contenedores| Diagrama de Contenedores   | Servicios principales (frontend, backend, BD, Docker)        | [c4_contenedor_coworking_1V.svg](Diagramas%20C4/c4_contenedor_coworking_1V.svg)  |
+| Contenedores| Diagrama de Contenedores v2| Variante con diseño diferente                         | [c4_contenedor_coworking_2V.svg](Diagramas%20C4/c4_contenedor_coworking_2V.svg)  |
+| Componentes | Diagrama de Componentes    | Componentes/diagrama de código frontend                      | [c4-diagram-code-frontend.svg](Diagramas%20C4/c4-diagram-code-frontend.svg)     |
+| Código      | Diagrama de Componentes    | Componentes/diagrama de código backend                       | [c4-diagram-code-backend.svg](Diagramas%20C4/c4-diagram-code-backend.svg)       |
+
+---
+
 ## 📅 Cronograma
 
 ```
@@ -311,6 +325,25 @@ Tarifa           N ──── N  TipoEspacio + Membresia
 
 ---
 
+## ✅ Cuadro de Done (Resumen por Historia de Usuario)
+
+| HU    | Historia de Usuario                         | Sprint | Release  | Fecha cierre | Estado |
+| ----- | ------------------------------------------- | ------ | -------: | ------------ | ------ |
+| HU-01 | Registro de Usuario                         | 1      | Release 1 | 2026-03-29   | ✅     |
+| HU-02 | Gestión de Sedes                            | 1      | Release 1 | 2026-03-29   | ✅     |
+| HU-03 | Configuración de espacios                   | 2      | Release 1 | 2026-04-10   | ✅     |
+| HU-04 | Consulta de disponibilidad                  | 2      | Release 1 | 2026-04-10   | ✅     |
+| HU-05 | Creación de Reservas                        | 3      | Release 1 | 2026-04-17   | ✅     |
+| HU-06 | Cancelación de Reservas                     | 3      | Release 1 | 2026-04-17   | ✅     |
+| HU-07 | Historial de reservas del Usuario           | 4      | Release 2 | 2026-05-08   | ✅     |
+| HU-08 | Administración de tarifas                   | 4      | Release 2 | 2026-05-08   | ✅     |
+| HU-09 | Reporte de ocupación                        | 5      | Release 2 | 2026-05-22   | ✅     |
+| HU-10 | Listado de reservas activas del día         | 5      | Release 2 | 2026-05-22   | ✅     |
+
+> Nota: Las fechas de cierre corresponden a los cierres de sprint/release definidos en el cronograma.
+
+---
+
 ## ✅ Definition of Done (DoD)
 
 > 📌 Referencia completa: [Issue #11 — Definition of Done](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/issues/11)
@@ -319,30 +352,30 @@ Cada Historia de Usuario se considera **terminada** cuando cumple **todos** los 
 
 ### Backend  
 
-- [ ] Endpoint(s) implementados con arquitectura en capas: Controller → Service → Repository. 
-- [ ] DTOs con validaciones (class-validator) para campos como fecha, horario, capacidad, unicidad y FKs. 
-- [ ] Validaciones de reglas de negocio aplicadas (disponibilidad, horarios, reservas activas, unicidad de tarifas). 
-- [ ] Manejo de errores con excepciones HTTP apropiadas (BadRequestException, ConflictException, NotFoundException). 
-- [ ] Respuestas con formato uniforme mediante interceptor global. 
-- [ ] Endpoints probados manualmente con Postman/Thunder Client y funcionando correctamente. 
+- [x] Endpoint(s) implementados con arquitectura en capas: Controller → Service → Repository. 
+- [x] DTOs con validaciones (class-validator) para campos como fecha, horario, capacidad, unicidad y FKs. 
+- [x] Validaciones de reglas de negocio aplicadas (disponibilidad, horarios, reservas activas, unicidad de tarifas). 
+- [x] Manejo de errores con excepciones HTTP apropiadas (BadRequestException, ConflictException, NotFoundException). 
+- [x] Respuestas con formato uniforme mediante interceptor global. 
+- [x] Endpoints probados manualmente con Postman/Thunder Client y funcionando correctamente. 
 
 
 ### Frontend 
 
-- [ ] Página(s) implementada(s) con componentes reutilizables (tablas, formularios, selects dinámicos). 
-- [ ] Consumo del API a través de la capa de services/. 
-- [ ] Manejo de estados: carga (loading), éxito y error en operaciones como reservas y disponibilidad. 
-- [ ] Formularios con validación del lado del cliente (campos obligatorios, rangos de horas, fechas válidas). 
-- [ ] Diseño responsivo y consistencia visual en todas las vistas. 
+- [x] Página(s) implementada(s) con componentes reutilizables (tablas, formularios, selects dinámicos). 
+- [x] Consumo del API a través de la capa de services/. 
+- [x] Manejo de estados: carga (loading), éxito y error en operaciones como reservas y disponibilidad. 
+- [x] Formularios con validación del lado del cliente (campos obligatorios, rangos de horas, fechas válidas). 
+- [x] Diseño responsivo y consistencia visual en todas las vistas. 
 
 
 ### Infraestructura y código 
 
-- [ ] Código versionado en GitHub con commits descriptivos. 
-- [ ] El sistema completo (backend + base de datos + frontend) funciona correctamente con docker compose up. 
-- [ ] No hay errores de consola ni advertencias críticas en frontend o backend. 
-- [ ] Las migraciones de Prisma están aplicadas y el esquema es consistente con el modelo de datos del coworking. 
-- [ ] Variables de entorno configuradas correctamente (.env). 
+- [x] Código versionado en GitHub con commits descriptivos. 
+- [x] El sistema completo (backend + base de datos + frontend) funciona correctamente con docker compose up. 
+- [x] No hay errores de consola ni advertencias críticas en frontend o backend. 
+- [x] Las migraciones de Prisma están aplicadas y el esquema es consistente con el modelo de datos del coworking. 
+- [x] Variables de entorno configuradas correctamente (.env). 
 
 ---
 
@@ -383,9 +416,9 @@ cp .env.example .env
 
 ```env
 # .env.example
-DB_USER=admin
-DB_PASSWORD=admin123
-DB_NAME=plataforma_reservas_coworking_db
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=reservas_de_coworking_db
 ```
 
 ### Levantar los servicios
@@ -397,6 +430,8 @@ docker compose up
 # O en modo detached (segundo plano)
 docker compose up -d
 ```
+
+---
 
 ### Acceder a los servicios
 
