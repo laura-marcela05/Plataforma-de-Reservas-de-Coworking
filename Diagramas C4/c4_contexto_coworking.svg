@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="1000" viewBox="0 0 1400 1000"
+     xmlns="http://www.w3.org/2000/svg"
+     font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+
+  <!-- ═══════════════ BACKGROUND ═══════════════ -->
+  <rect width="1400" height="1000" fill="#F7F6F3"/>
+
+  <!-- ═══════════════ DEFS ═══════════════ -->
+  <defs>
+    <marker id="arr" viewBox="0 0 12 12" refX="10" refY="6"
+            markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M1 2L10 6L1 10" fill="none" stroke="#5A5A5A"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════════════ TÍTULO ═══════════════ -->
+  <text x="700" y="48" text-anchor="middle"
+        font-size="24" font-weight="700" fill="#111111" letter-spacing="-0.3">
+    System Context View: Plataforma de Reservas de Coworking
+  </text>
+  <text x="700" y="72" text-anchor="middle"
+        font-size="13" fill="#888880">
+    The system context diagram for Plataforma de Reservas de Coworking | C4 Model | License: CC BY 4.0
+  </text>
+  <line x1="60" y1="88" x2="1340" y2="88" stroke="#DDDBD4" stroke-width="1.2"/>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       ACTOR 1 — Usuario  (izquierda, cx=200)
+  ══════════════════════════════════════════════════════ -->
+
+  <!-- Ícono persona -->
+  <circle cx="200" cy="130" r="26" fill="#C8EDE0" stroke="#0A6E52" stroke-width="1.8"/>
+  <path d="M163 175 C163 151 237 151 237 175"
+        fill="none" stroke="#0A6E52" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Caja -->
+  <rect x="110" y="186" width="180" height="116" rx="10"
+        fill="#DDF2EA" stroke="#0A6E52" stroke-width="1.8"/>
+  <!-- título -->
+  <text x="200" y="214" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#054535">Usuario</text>
+  <!-- subtítulo tipo -->
+  <text x="200" y="233" text-anchor="middle"
+        font-size="12" fill="#0A6E52">[Person]</text>
+  <!-- separador -->
+  <line x1="126" y1="242" x2="274" y2="242" stroke="#0A6E52" stroke-width="0.7" opacity="0.4"/>
+  <!-- descripción -->
+  <text x="200" y="260" text-anchor="middle" font-size="12" fill="#054535">
+    Consulta disponibilidad de
+  </text>
+  <text x="200" y="276" text-anchor="middle" font-size="12" fill="#054535">
+    espacios y realiza, consulta
+  </text>
+  <text x="200" y="292" text-anchor="middle" font-size="12" fill="#054535">
+    y cancela sus reservas web
+  </text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       ACTOR 2 — Administrador  (derecha, cx=1200)
+  ══════════════════════════════════════════════════════ -->
+
+  <circle cx="1200" cy="130" r="26" fill="#DDD9FC" stroke="#4C42B0" stroke-width="1.8"/>
+  <path d="M1163 175 C1163 151 1237 151 1237 175"
+        fill="none" stroke="#4C42B0" stroke-width="2" stroke-linecap="round"/>
+
+  <rect x="1110" y="186" width="180" height="116" rx="10"
+        fill="#ECEAFD" stroke="#4C42B0" stroke-width="1.8"/>
+  <text x="1200" y="214" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#231E5A">Administrador</text>
+  <text x="1200" y="233" text-anchor="middle"
+        font-size="12" fill="#4C42B0">[Person]</text>
+  <line x1="1126" y1="242" x2="1274" y2="242" stroke="#4C42B0" stroke-width="0.7" opacity="0.4"/>
+  <text x="1200" y="260" text-anchor="middle" font-size="12" fill="#231E5A">
+    Gestiona sedes, espacios,
+  </text>
+  <text x="1200" y="276" text-anchor="middle" font-size="12" fill="#231E5A">
+    tipos, tarifas, membresías
+  </text>
+  <text x="1200" y="292" text-anchor="middle" font-size="12" fill="#231E5A">
+    y reportes de ocupación
+  </text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SISTEMA PRINCIPAL — centro  (x=420 y=370 w=560 h=220)
+  ══════════════════════════════════════════════════════ -->
+
+  <rect x="420" y="370" width="560" height="230" rx="14"
+        fill="#D4E8F8" stroke="#1660A0" stroke-width="2.8"/>
+
+  <text x="700" y="406" text-anchor="middle"
+        font-size="20" font-weight="700" fill="#08305A">
+    Plataforma de Reservas de Coworking
+  </text>
+  <text x="700" y="428" text-anchor="middle"
+        font-size="13" fill="#1660A0">[Software System]</text>
+  <line x1="440" y1="438" x2="960" y2="438" stroke="#1660A0" stroke-width="0.8" opacity="0.3"/>
+
+  <text x="700" y="460" text-anchor="middle" font-size="13" fill="#083650">
+    Aplicación web full-stack para administrar espacios de coworking.
+  </text>
+  <text x="700" y="479" text-anchor="middle" font-size="13" fill="#083650">
+    Permite reservar escritorios y salas, gestionar sedes, espacios,
+  </text>
+  <text x="700" y="498" text-anchor="middle" font-size="13" fill="#083650">
+    membresías, tarifas y generar reportes de ocupación.
+  </text>
+
+  <line x1="440" y1="510" x2="960" y2="510" stroke="#1660A0" stroke-width="0.6" opacity="0.25"/>
+
+  <text x="700" y="531" text-anchor="middle"
+        font-size="12" fill="#1660A0" font-style="italic">
+    Frontend: Next.js 16 · React 19 · Tailwind CSS  (puerto 3000)
+  </text>
+  <text x="700" y="551" text-anchor="middle"
+        font-size="12" fill="#1660A0" font-style="italic">
+    Backend: NestJS 11 · REST API /api/v1 · TypeScript  (puerto 3001)
+  </text>
+  <text x="700" y="571" text-anchor="middle"
+        font-size="12" fill="#1660A0" font-style="italic">
+    Módulos: usuarios · sedes · espacios · reservas · tarifas · membresías · reportes
+  </text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       EXTERNOS IZQUIERDA
+  ══════════════════════════════════════════════════════ -->
+
+  <!-- PostgreSQL 16  (izquierda-arriba) -->
+  <rect x="58" y="395" width="224" height="158" rx="10"
+        fill="#EEECE4" stroke="#5A5850" stroke-width="1.8"/>
+  <text x="170" y="424" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#2A2A28">PostgreSQL 16</text>
+  <text x="170" y="443" text-anchor="middle"
+        font-size="12" fill="#5A5850">[Software System]</text>
+  <line x1="76" y1="452" x2="264" y2="452" stroke="#5A5850" stroke-width="0.7" opacity="0.4"/>
+  <text x="170" y="470" text-anchor="middle" font-size="12" fill="#2A2A28">Base de datos relacional.</text>
+  <text x="170" y="487" text-anchor="middle" font-size="12" fill="#2A2A28">Almacena usuarios, sedes,</text>
+  <text x="170" y="504" text-anchor="middle" font-size="12" fill="#2A2A28">espacios, membresías,</text>
+  <text x="170" y="521" text-anchor="middle" font-size="12" fill="#2A2A28">tarifas y reservas</text>
+  <text x="170" y="541" text-anchor="middle" font-size="11" fill="#888880" font-style="italic">puerto 5432 · imagen alpine</text>
+
+  <!-- Prisma ORM  (izquierda-abajo) -->
+  <rect x="58" y="615" width="224" height="158" rx="10"
+        fill="#FAEAE4" stroke="#9A3A1A" stroke-width="1.8"/>
+  <text x="170" y="644" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#4A1A0A">Prisma ORM v7</text>
+  <text x="170" y="663" text-anchor="middle"
+        font-size="12" fill="#9A3A1A">[Software System]</text>
+  <line x1="76" y1="672" x2="264" y2="672" stroke="#9A3A1A" stroke-width="0.7" opacity="0.4"/>
+  <text x="170" y="690" text-anchor="middle" font-size="12" fill="#4A1A0A">ORM type-safe para Node.js.</text>
+  <text x="170" y="707" text-anchor="middle" font-size="12" fill="#4A1A0A">Gestiona el schema,</text>
+  <text x="170" y="724" text-anchor="middle" font-size="12" fill="#4A1A0A">migraciones y acceso</text>
+  <text x="170" y="741" text-anchor="middle" font-size="12" fill="#4A1A0A">a datos desde NestJS</text>
+  <text x="170" y="761" text-anchor="middle" font-size="11" fill="#888880" font-style="italic">@prisma/client · adapter-pg</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       EXTERNOS DERECHA
+  ══════════════════════════════════════════════════════ -->
+
+  <!-- Docker Compose  (derecha-arriba) -->
+  <rect x="1118" y="395" width="224" height="158" rx="10"
+        fill="#FFF4DC" stroke="#A86400" stroke-width="1.8"/>
+  <text x="1230" y="424" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#4E2E00">Docker Compose</text>
+  <text x="1230" y="443" text-anchor="middle"
+        font-size="12" fill="#A86400">[Software System]</text>
+  <line x1="1136" y1="452" x2="1324" y2="452" stroke="#A86400" stroke-width="0.7" opacity="0.4"/>
+  <text x="1230" y="470" text-anchor="middle" font-size="12" fill="#4E2E00">Orquesta 3 contenedores:</text>
+  <text x="1230" y="487" text-anchor="middle" font-size="12" fill="#4E2E00">frontend, backend y base</text>
+  <text x="1230" y="504" text-anchor="middle" font-size="12" fill="#4E2E00">de datos. Healthchecks,</text>
+  <text x="1230" y="521" text-anchor="middle" font-size="12" fill="#4E2E00">volúmenes y red interna</text>
+  <text x="1230" y="541" text-anchor="middle" font-size="11" fill="#888880" font-style="italic">docker-compose.yml · .env</text>
+
+  <!-- Navegador Web  (derecha-abajo) -->
+  <rect x="1118" y="615" width="224" height="158" rx="10"
+        fill="#E6F4D8" stroke="#386510" stroke-width="1.8"/>
+  <text x="1230" y="644" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#163404">Navegador Web</text>
+  <text x="1230" y="663" text-anchor="middle"
+        font-size="12" fill="#386510">[Software System]</text>
+  <line x1="1136" y1="672" x2="1324" y2="672" stroke="#386510" stroke-width="0.7" opacity="0.4"/>
+  <text x="1230" y="690" text-anchor="middle" font-size="12" fill="#163404">Cliente final del sistema.</text>
+  <text x="1230" y="707" text-anchor="middle" font-size="12" fill="#163404">Consume la SPA/SSR</text>
+  <text x="1230" y="724" text-anchor="middle" font-size="12" fill="#163404">servida por Next.js con</text>
+  <text x="1230" y="741" text-anchor="middle" font-size="12" fill="#163404">Tailwind CSS y React 19</text>
+  <text x="1230" y="761" text-anchor="middle" font-size="11" fill="#888880" font-style="italic">Chrome · Firefox · Safari</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       FLECHAS — Actor → Sistema Principal
+  ══════════════════════════════════════════════════════ -->
+
+  <!-- Usuario → Sistema  (curva suave, sin cruzar nada) -->
+  <path d="M 200 304 C 200 348, 460 370, 500 370"
+        fill="none" stroke="#5A5A5A" stroke-width="1.4"
+        stroke-dasharray="8 5" marker-end="url(#arr)"/>
+  <!-- label centrado en la curva, zona despejada -->
+  <rect x="228" y="316" width="178" height="36" rx="5"
+        fill="#F7F6F3" opacity="0.92"/>
+  <text x="317" y="331" text-anchor="middle" font-size="12" fill="#444">Realiza y consulta reservas</text>
+  <text x="317" y="346" text-anchor="middle" font-size="12" fill="#444">vía interfaz web</text>
+
+  <!-- Administrador → Sistema  (curva simétrica) -->
+  <path d="M 1200 304 C 1200 348, 940 370, 900 370"
+        fill="none" stroke="#5A5A5A" stroke-width="1.4"
+        stroke-dasharray="8 5" marker-end="url(#arr)"/>
+  <rect x="994" y="316" width="184" height="36" rx="5"
+        fill="#F7F6F3" opacity="0.92"/>
+  <text x="1086" y="331" text-anchor="middle" font-size="12" fill="#444">Administra catálogo y</text>
+  <text x="1086" y="346" text-anchor="middle" font-size="12" fill="#444">genera reportes vía web</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       FLECHAS — Sistema → Externos  (líneas horizontales limpias)
+  ══════════════════════════════════════════════════════ -->
+
+  <!-- Sistema → PostgreSQL  (horizontal izquierda, altura y=474) -->
+  <path d="M 420 474 L 284 474"
+        fill="none" stroke="#5A5A5A" stroke-width="1.4"
+        stroke-dasharray="8 5" marker-end="url(#arr)"/>
+  <rect x="295" y="452" width="120" height="36" rx="5"
+        fill="#F7F6F3" opacity="0.92"/>
+  <text x="355" y="467" text-anchor="middle" font-size="12" fill="#444">Lee y escribe</text>
+  <text x="355" y="482" text-anchor="middle" font-size="12" fill="#444">datos via Prisma</text>
+
+  <!-- Sistema → Prisma ORM  (baja izquierda, L-bend sin cruzar PostgreSQL) -->
+  <path d="M 420 540 L 340 540 L 340 610 L 284 660"
+        fill="none" stroke="#5A5A5A" stroke-width="1.4"
+        stroke-dasharray="8 5" marker-end="url(#arr)"/>
+  <rect x="310" y="548" width="136" height="36" rx="5"
+        fill="#F7F6F3" opacity="0.92"/>
+  <text x="378" y="563" text-anchor="middle" font-size="12" fill="#444">Define schema y</text>
+  <text x="378" y="578" text-anchor="middle" font-size="12" fill="#444">ejecuta migraciones</text>
+
+  <!-- Sistema → Docker Compose  (horizontal derecha, altura y=474) -->
+  <path d="M 980 474 L 1116 474"
+        fill="none" stroke="#5A5A5A" stroke-width="1.4"
+        stroke-dasharray="8 5" marker-end="url(#arr)"/>
+  <rect x="985" y="452" width="126" height="36" rx="5"
+        fill="#F7F6F3" opacity="0.92"/>
+  <text x="1048" y="467" text-anchor="middle" font-size="12" fill="#444">Contenedorizado</text>
+  <text x="1048" y="482" text-anchor="middle" font-size="12" fill="#444">y orquestado en</text>
+
+  <!-- Sistema → Navegador Web  (baja derecha, L-bend sin cruzar Docker) -->
+  <path d="M 980 540 L 1060 540 L 1060 610 L 1116 660"
+        fill="none" stroke="#5A5A5A" stroke-width="1.4"
+        stroke-dasharray="8 5" marker-end="url(#arr)"/>
+  <rect x="954" y="548" width="130" height="36" rx="5"
+        fill="#F7F6F3" opacity="0.92"/>
+  <text x="1019" y="563" text-anchor="middle" font-size="12" fill="#444">Sirve SPA/SSR</text>
+  <text x="1019" y="578" text-anchor="middle" font-size="12" fill="#444">en localhost:3000</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       LEYENDA
+  ══════════════════════════════════════════════════════ -->
+  <rect x="58" y="832" width="420" height="72" rx="8"
+        fill="#FFFFFF" stroke="#DDDBD4" stroke-width="1.2"/>
+  <text x="78" y="854" font-size="12" font-weight="700" fill="#333">Leyenda</text>
+
+  <!-- flecha punteada -->
+  <line x1="78" y1="872" x2="126" y2="872"
+        stroke="#5A5A5A" stroke-width="1.4" stroke-dasharray="7 5"
+        marker-end="url(#arr)"/>
+  <text x="136" y="876" font-size="12" fill="#555">Relación / interacción entre elementos</text>
+
+  <!-- caja sistema principal -->
+  <rect x="78" y="888" width="18" height="12" rx="3"
+        fill="#D4E8F8" stroke="#1660A0" stroke-width="1.5"/>
+  <text x="104" y="899" font-size="12" fill="#555">Sistema principal (en scope)</text>
+
+  <!-- caja externo -->
+  <rect x="258" y="888" width="18" height="12" rx="3"
+        fill="#EEECE4" stroke="#5A5850" stroke-width="1.5"/>
+  <text x="284" y="899" font-size="12" fill="#555">Sistema externo / actor</text>
+
+  <!-- persona -->
+  <circle cx="87" cy="910" r="6" fill="#DDD9FC" stroke="#4C42B0" stroke-width="1.2"/>
+  <path d="M78 922 C78 916 96 916 96 922" fill="none" stroke="#4C42B0" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="104" y="920" font-size="12" fill="#555">Actor (persona)</text>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PIE DE PÁGINA
+  ══════════════════════════════════════════════════════ -->
+  <line x1="60" y1="924" x2="1340" y2="924" stroke="#DDDBD4" stroke-width="1"/>
+  <text x="700" y="950" text-anchor="middle" font-size="11.5" fill="#AAAAAA">
+    Diagrama de contexto del sistema para Plataforma de Reservas de Coworking · Proyecto evaluativo Programación Web 2026A · C4 Model · CC BY 4.0
+  </text>
+  <text x="700" y="968" text-anchor="middle" font-size="11" fill="#BBBBBB">
+    github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking
+  </text>
+
+</svg>

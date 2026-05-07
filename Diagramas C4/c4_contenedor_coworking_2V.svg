@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1080" width="1400" height="1080"
+     font-family="Arial, Helvetica, sans-serif">
+
+  <!-- ── FONDO ── -->
+  <rect width="1400" height="1080" fill="#ffffff"/>
+
+  <!-- ── DEFS: flechas ── -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M1,1 L9,5 L1,9" fill="none" stroke="#555" stroke-width="1.5"/>
+    </marker>
+    <marker id="arrGray" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M1,1 L9,5 L1,9" fill="none" stroke="#999" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       TÍTULO
+  ══════════════════════════════════════════════════════════════════ -->
+  <text x="700" y="32" text-anchor="middle" font-size="13" fill="#666" font-weight="normal">
+    Container View: Plataforma de Reservas de Coworking
+  </text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       ACTOR: Usuario / Cliente  (col izq, top)
+       centro x=175, y-cabeza=80
+  ══════════════════════════════════════════════════════════════════ -->
+  <!-- cabeza -->
+  <circle cx="200" cy="82" r="26" fill="#fff" stroke="#2d7a2d" stroke-width="2.5"/>
+  <!-- cuerpo -->
+  <path d="M200,108 L200,146 M168,124 L232,124 M200,146 L178,172 M200,146 L222,172"
+        fill="none" stroke="#2d7a2d" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- caja -->
+  <rect x="112" y="178" width="176" height="96" rx="6"
+        fill="#dff0df" stroke="#2d7a2d" stroke-width="2"/>
+  <text x="200" y="198" text-anchor="middle" font-size="13" fill="#1a5c1a" font-weight="bold">Usuario /</text>
+  <text x="200" y="213" text-anchor="middle" font-size="13" fill="#1a5c1a" font-weight="bold">Cliente Coworking</text>
+  <text x="200" y="230" text-anchor="middle" font-size="10.5" fill="#2d7a2d">[Person]</text>
+  <text x="200" y="247" text-anchor="middle" font-size="10.5" fill="#1a5c1a">Reserva espacios,</text>
+  <text x="200" y="262" text-anchor="middle" font-size="10.5" fill="#1a5c1a">consulta historial.</text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       ACTOR: Administrador  (col der, top)
+       centro x=1200, y-cabeza=80
+  ══════════════════════════════════════════════════════════════════ -->
+  <circle cx="1200" cy="82" r="26" fill="#fff" stroke="#2d7a2d" stroke-width="2.5"/>
+  <path d="M1200,108 L1200,146 M1168,124 L1232,124 M1200,146 L1178,172 M1200,146 L1222,172"
+        fill="none" stroke="#2d7a2d" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="1112" y="178" width="176" height="96" rx="6"
+        fill="#dff0df" stroke="#2d7a2d" stroke-width="2"/>
+  <text x="1200" y="198" text-anchor="middle" font-size="13" fill="#1a5c1a" font-weight="bold">Administrador</text>
+  <text x="1200" y="216" text-anchor="middle" font-size="10.5" fill="#2d7a2d">[Person]</text>
+  <text x="1200" y="234" text-anchor="middle" font-size="10.5" fill="#1a5c1a">Gestiona sedes, tarifas,</text>
+  <text x="1200" y="249" text-anchor="middle" font-size="10.5" fill="#1a5c1a">membresías y reportes.</text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CAJA EXTERIOR: Sistema
+       x=60, y=315, w=1280, h=700
+  ══════════════════════════════════════════════════════════════════ -->
+  <rect x="60" y="315" width="1280" height="718" rx="8"
+        fill="#f4f8ff" stroke="#1a5fa8" stroke-width="2"/>
+  <!-- etiqueta sistema abajo-izq -->
+  <text x="78" y="1013" font-size="14" fill="#1a5fa8" font-weight="bold">Plataforma de Reservas de Coworking</text>
+  <text x="78" y="1028" font-size="11" fill="#1a5fa8">[Software System — Docker Compose]</text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FILA 1 de contenedores (y=342)
+       3 cajas: Frontend | Backend API | Módulos de Negocio
+       ancho caja = 310, gap = 40
+       col1 x=80  col2 x=430  col3 x=780  ... pero centradas en 700
+       Layout: 3 cols uniformes dentro de [80..1320]
+         col1-left=80   col2-left=463  col3-left=846
+  ══════════════════════════════════════════════════════════════════ -->
+
+  <!-- ── CONTENEDOR 1: Frontend SPA ── -->
+  <!-- browser bar -->
+  <rect x="80" y="342" width="320" height="295" rx="6"
+        fill="#dce8f7" stroke="#1a5fa8" stroke-width="2"/>
+  <rect x="87" y="349" width="300" height="22" rx="3" fill="#aac8e8"/>
+  <circle cx="99"  cy="360" r="4" fill="#e0e0e0"/>
+  <circle cx="113" cy="360" r="4" fill="#e0e0e0"/>
+  <circle cx="127" cy="360" r="4" fill="#e0e0e0"/>
+  <!-- título -->
+  <text x="240" y="395" text-anchor="middle" font-size="14" fill="#1a5fa8" font-weight="bold">Frontend SPA</text>
+  <text x="240" y="412" text-anchor="middle" font-size="10" fill="#1a5fa8">[Container: Next.js 16 / React 19 / Tailwind CSS 4]</text>
+  <line x1="95" y1="420" x2="390" y2="420" stroke="#1a5fa8" stroke-width="0.7" opacity="0.4"/>
+  <text x="240" y="440" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Aplicación de página única (SPA).</text>
+  <text x="240" y="456" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Provee interfaz web responsiva con</text>
+  <text x="240" y="471" text-anchor="middle" font-size="10.5" fill="#1a5c3a">dashboard, gestión de reservas,</text>
+  <text x="240" y="486" text-anchor="middle" font-size="10.5" fill="#1a5c3a">espacios, sedes, tarifas, membresías</text>
+  <text x="240" y="501" text-anchor="middle" font-size="10.5" fill="#1a5c3a">y reportes de ocupación.</text>
+  <text x="240" y="516" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Puerto 3000. CORS habilitado.</text>
+  <text x="240" y="531" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Cliente HTTP centralizado (lib/api.ts).</text>
+  <text x="240" y="546" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Build: next build → .next/</text>
+  <text x="240" y="561" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Docker: coworking_frontend</text>
+  <text x="240" y="577" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">TypeScript · ESLint · PostCSS</text>
+  <text x="240" y="593" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">&#160;</text>
+
+  <!-- ── CONTENEDOR 2: Backend API ── -->
+  <rect x="463" y="342" width="320" height="295" rx="6"
+        fill="#dce8f7" stroke="#1a5fa8" stroke-width="2"/>
+  <rect x="470" y="349" width="300" height="22" rx="3" fill="#aac8e8"/>
+  <text x="486" y="363" font-size="12" fill="#1a5fa8" font-weight="bold">&gt;_</text>
+  <text x="623" y="395" text-anchor="middle" font-size="14" fill="#1a5fa8" font-weight="bold">Backend API</text>
+  <text x="623" y="412" text-anchor="middle" font-size="10" fill="#1a5fa8">[Container: NestJS 11 / TypeScript / Node.js]</text>
+  <line x1="478" y1="420" x2="773" y2="420" stroke="#1a5fa8" stroke-width="0.7" opacity="0.4"/>
+  <text x="623" y="440" text-anchor="middle" font-size="10.5" fill="#1a5c3a">API REST con prefijo global /api/v1.</text>
+  <text x="623" y="456" text-anchor="middle" font-size="10.5" fill="#1a5c3a">8 módulos: usuarios, sedes, espacios,</text>
+  <text x="623" y="471" text-anchor="middle" font-size="10.5" fill="#1a5c3a">reservas, tarifas, membresías,</text>
+  <text x="623" y="486" text-anchor="middle" font-size="10.5" fill="#1a5c3a">tipos-espacio y reportes.</text>
+  <text x="623" y="501" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Patrón: Controller → Service →</text>
+  <text x="623" y="516" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Repository → PrismaService.</text>
+  <text x="623" y="531" text-anchor="middle" font-size="10.5" fill="#1a5c3a">ValidationPipe · HttpExceptionFilter</text>
+  <text x="623" y="546" text-anchor="middle" font-size="10.5" fill="#1a5c3a">ResponseInterceptor · CORS.</text>
+  <text x="623" y="561" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Puerto 3001. Docker: coworking_backend</text>
+  <text x="623" y="577" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">class-validator · rxjs · dotenv</text>
+
+  <!-- ── CONTENEDOR 3 (fila 1): Módulos de Negocio ── -->
+  <rect x="846" y="342" width="320" height="295" rx="6"
+        fill="#dce8f7" stroke="#1a5fa8" stroke-width="2"/>
+  <rect x="853" y="349" width="300" height="22" rx="3" fill="#aac8e8"/>
+  <text x="1006" y="362" text-anchor="middle" font-size="10" fill="#1a5fa8" font-weight="bold">Módulos NestJS — /api/v1</text>
+  <text x="1006" y="392" text-anchor="middle" font-size="14" fill="#1a5fa8" font-weight="bold">Módulos de Negocio</text>
+  <text x="1006" y="409" text-anchor="middle" font-size="10" fill="#1a5fa8">[Container: NestJS Modules / REST Endpoints]</text>
+  <line x1="861" y1="417" x2="1156" y2="417" stroke="#1a5fa8" stroke-width="0.7" opacity="0.4"/>
+  <text x="876" y="438" font-size="10.5" fill="#1a5c3a">• /usuarios — CRUD completo</text>
+  <text x="876" y="454" font-size="10.5" fill="#1a5c3a">• /sedes — gestión de sucursales</text>
+  <text x="876" y="470" font-size="10.5" fill="#1a5c3a">• /espacios — disponibilidad</text>
+  <text x="876" y="486" font-size="10.5" fill="#1a5c3a">• /reservas — ciclo de vida</text>
+  <text x="876" y="502" font-size="10.5" fill="#1a5c3a">• /tarifas — precio por hora</text>
+  <text x="876" y="518" font-size="10.5" fill="#1a5c3a">• /membresias — tipos de plan</text>
+  <text x="876" y="534" font-size="10.5" fill="#1a5c3a">• /tipos-espacio — categorías</text>
+  <text x="876" y="550" font-size="10.5" fill="#1a5c3a">• /reportes — ocupación por sede</text>
+  <text x="876" y="566" font-size="10.5" fill="#1a5c3a">  y rango de fechas</text>
+  <text x="1006" y="584" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">Estados: activa · cancelada · finalizada</text>
+  <text x="1006" y="598" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">Auto-finalización de reservas expiradas</text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FILA 2 de contenedores (y=700)
+       3 cajas: Prisma ORM | Base de Datos | Docker Compose
+         col1 x=80   col2 x=463  col3 x=846
+  ══════════════════════════════════════════════════════════════════ -->
+
+  <!-- ── CONTENEDOR 4: Prisma ORM ── -->
+  <rect x="80" y="700" width="320" height="230" rx="6"
+        fill="#dce8f7" stroke="#1a5fa8" stroke-width="2"/>
+  <text x="240" y="736" text-anchor="middle" font-size="14" fill="#1a5fa8" font-weight="bold">Prisma ORM</text>
+  <text x="240" y="753" text-anchor="middle" font-size="10" fill="#1a5fa8">[Container: Prisma 7 / @prisma/client]</text>
+  <line x1="95" y1="761" x2="390" y2="761" stroke="#1a5fa8" stroke-width="0.7" opacity="0.4"/>
+  <text x="240" y="780" text-anchor="middle" font-size="10.5" fill="#1a5c3a">ORM integrado en el Backend.</text>
+  <text x="240" y="796" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Gestiona schema.prisma con</text>
+  <text x="240" y="812" text-anchor="middle" font-size="10.5" fill="#1a5c3a">7 modelos y relaciones.</text>
+  <text x="240" y="828" text-anchor="middle" font-size="10.5" fill="#1a5c3a">PrismaService inyectable en</text>
+  <text x="240" y="844" text-anchor="middle" font-size="10.5" fill="#1a5c3a">todos los repositorios.</text>
+  <text x="240" y="860" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Migraciones via prisma migrate.</text>
+  <text x="240" y="876" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Adaptador: @prisma/adapter-pg</text>
+  <text x="240" y="896" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">pg · prisma-client-js</text>
+
+  <!-- ── CONTENEDOR 5: Base de Datos ── -->
+  <rect x="463" y="700" width="320" height="230" rx="6"
+        fill="#dce8f7" stroke="#1a5fa8" stroke-width="2"/>
+  <!-- tapa cilindro -->
+  <ellipse cx="623" cy="722" rx="135" ry="16" fill="#aac8e8" stroke="#1a5fa8" stroke-width="1.2"/>
+  <line x1="488" y1="722" x2="488" y2="738" stroke="#1a5fa8" stroke-width="1.2"/>
+  <line x1="758" y1="722" x2="758" y2="738" stroke="#1a5fa8" stroke-width="1.2"/>
+  <text x="623" y="768" text-anchor="middle" font-size="14" fill="#1a5fa8" font-weight="bold">Base de Datos</text>
+  <text x="623" y="785" text-anchor="middle" font-size="10" fill="#1a5fa8">[Container: PostgreSQL 16 / Docker Volume]</text>
+  <line x1="478" y1="793" x2="758" y2="793" stroke="#1a5fa8" stroke-width="0.7" opacity="0.4"/>
+  <text x="623" y="812" text-anchor="middle" font-size="10.5" fill="#1a5c3a">7 tablas: usuarios, membresías,</text>
+  <text x="623" y="828" text-anchor="middle" font-size="10.5" fill="#1a5c3a">sedes, tipos_espacio, espacios,</text>
+  <text x="623" y="844" text-anchor="middle" font-size="10.5" fill="#1a5c3a">tarifas, reservas.</text>
+  <text x="623" y="860" text-anchor="middle" font-size="10.5" fill="#1a5c3a">TZ: America/Bogota. Puerto 5432.</text>
+  <text x="623" y="876" text-anchor="middle" font-size="10.5" fill="#1a5c3a">Volumen: postgres_data</text>
+  <text x="623" y="896" text-anchor="middle" font-size="10" fill="#1a5fa8" font-style="italic">Docker: coworking_db</text>
+
+  <!-- ── CONTENEDOR 6: Docker Compose ── -->
+  <rect x="846" y="700" width="320" height="230" rx="6"
+        fill="#e8e8e8" stroke="#666" stroke-width="2"/>
+  <text x="1006" y="736" text-anchor="middle" font-size="14" fill="#333" font-weight="bold">Docker Compose</text>
+  <text x="1006" y="753" text-anchor="middle" font-size="10" fill="#555">[Infrastructure: Orquestador de contenedores]</text>
+  <line x1="861" y1="761" x2="1156" y2="761" stroke="#666" stroke-width="0.7" opacity="0.4"/>
+  <text x="1006" y="780" text-anchor="middle" font-size="10.5" fill="#333">Orquesta 3 servicios: db,</text>
+  <text x="1006" y="796" text-anchor="middle" font-size="10.5" fill="#333">backend y frontend.</text>
+  <text x="1006" y="812" text-anchor="middle" font-size="10.5" fill="#333">Health checks: pg_isready.</text>
+  <text x="1006" y="828" text-anchor="middle" font-size="10.5" fill="#333">Volúmenes persistentes para</text>
+  <text x="1006" y="844" text-anchor="middle" font-size="10.5" fill="#333">postgres_data, node_modules</text>
+  <text x="1006" y="860" text-anchor="middle" font-size="10.5" fill="#333">y .next cache.</text>
+  <text x="1006" y="876" text-anchor="middle" font-size="10.5" fill="#333">Red interna entre servicios.</text>
+  <text x="1006" y="896" text-anchor="middle" font-size="10" fill="#555" font-style="italic">docker-compose.yml · Dockerfile ×2</text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FLECHAS
+  ══════════════════════════════════════════════════════════════════ -->
+
+  <!-- 1. Usuario → Frontend (diagonal ↓) -->
+  <line x1="230" y1="274" x2="215" y2="342"
+        stroke="#555" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <text x="168" y="300" text-anchor="middle" font-size="9.5" fill="#333">Accede al dashboard</text>
+  <text x="168" y="313" text-anchor="middle" font-size="9.5" fill="#555">[HTTPS / Puerto 3000]</text>
+
+  <!-- 2. Administrador → Frontend (diagonal ↓ hacia el SPA también, via navegador) -->
+  <line x1="1160" y1="274" x2="390" y2="342"
+        stroke="#555" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <!-- etiqueta en el punto medio de la línea -->
+  <text x="820" y="296" text-anchor="middle" font-size="9.5" fill="#333">Gestiona sistema via navegador</text>
+  <text x="820" y="309" text-anchor="middle" font-size="9.5" fill="#555">[HTTPS / Puerto 3000]</text>
+
+  <!-- 3. Frontend → Backend API (horizontal →) -->
+  <line x1="400" y1="490" x2="463" y2="490"
+        stroke="#555" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <text x="431" y="480" text-anchor="middle" font-size="9.5" fill="#333">Realiza peticiones API</text>
+  <text x="431" y="504" text-anchor="middle" font-size="9.5" fill="#555">[JSON/HTTP]</text>
+
+  <!-- 4. Backend API → Módulos de Negocio (horizontal →) -->
+  <line x1="783" y1="490" x2="846" y2="490"
+        stroke="#555" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <text x="815" y="480" text-anchor="middle" font-size="9.5" fill="#333">Delega lógica</text>
+  <text x="815" y="504" text-anchor="middle" font-size="9.5" fill="#555">[NestJS IoC]</text>
+
+  <!-- 5. Backend API → Prisma ORM (↓ diagonal) -->
+  <line x1="530" y1="637" x2="300" y2="700"
+        stroke="#555" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <text x="388" y="662" text-anchor="middle" font-size="9.5" fill="#333">Lee y escribe datos</text>
+  <text x="388" y="675" text-anchor="middle" font-size="9.5" fill="#555">[Prisma Client / ORM]</text>
+
+  <!-- 6. Prisma ORM → Base de Datos (horizontal →) -->
+  <line x1="400" y1="815" x2="463" y2="815"
+        stroke="#555" stroke-width="1.4" stroke-dasharray="6,4" marker-end="url(#arr)"/>
+  <text x="431" y="804" text-anchor="middle" font-size="9.5" fill="#333">Lee y escribe</text>
+  <text x="431" y="828" text-anchor="middle" font-size="9.5" fill="#555">[PostgreSQL protocol]</text>
+
+  <!-- 7. Módulos de Negocio → Prisma ORM (diagonal larga ↓ izq) -->
+  <path d="M 1006,637 Q 700,690 300,700"
+        fill="none" stroke="#999" stroke-width="1.1" stroke-dasharray="5,4" marker-end="url(#arrGray)"/>
+  <text x="680" y="682" text-anchor="middle" font-size="9.5" fill="#666">Usa PrismaService</text>
+  <text x="680" y="695" text-anchor="middle" font-size="9.5" fill="#888">[Inyección de dependencias]</text>
+
+  <!-- 8. Docker Compose → Backend API (↑ diagonal) -->
+  <path d="M 950,700 Q 860,660 720,637"
+        fill="none" stroke="#999" stroke-width="1.1" stroke-dasharray="5,4" marker-end="url(#arrGray)"/>
+  <text x="840" y="655" text-anchor="middle" font-size="9.5" fill="#666">Orquesta y despliega</text>
+  <text x="840" y="668" text-anchor="middle" font-size="9.5" fill="#888">[docker-compose.yml]</text>
+
+  <!-- 9. Docker Compose → Base de Datos (horizontal ←) -->
+  <line x1="846" y1="820" x2="783" y2="820"
+        stroke="#999" stroke-width="1.1" stroke-dasharray="5,4" marker-end="url(#arrGray)"/>
+  <text x="815" y="810" text-anchor="middle" font-size="9.5" fill="#666">Gestiona instancia</text>
+  <text x="815" y="833" text-anchor="middle" font-size="9.5" fill="#888">[service: db]</text>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       PIE DE PÁGINA
+  ══════════════════════════════════════════════════════════════════ -->
+  <text x="60" y="1063" font-size="11" fill="#555">
+    Container View: Plataforma de Reservas de Coworking  |  C4 Model – Nivel 2  |  GitHub: laura-marcela05/Plataforma-de-Reservas-de-Coworking
+  </text>
+
+</svg>
