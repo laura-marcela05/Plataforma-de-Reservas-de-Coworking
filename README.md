@@ -313,7 +313,7 @@ Tarifa           N ──── N  TipoEspacio + Membresia
 
 ## ✅ Definition of Done (DoD)
 
-> 📌 Referencia completa: [Issue #17 — Definition of Done](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/issues/11)
+> 📌 Referencia completa: [Issue #11 — Definition of Done](https://github.com/laura-marcela05/Plataforma-de-Reservas-de-Coworking/issues/11)
 
 Cada Historia de Usuario se considera **terminada** cuando cumple **todos** los siguientes criterios:
 
